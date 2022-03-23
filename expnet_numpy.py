@@ -13,7 +13,7 @@ class ExpNet:
         self.learning_rate = learning_rate
         self.init_weight_mean = init_w_mean
         self.init_weight_variance = init_w_variance
-        # make weights: notice +1 for bias, we have to keep in mind to add the bias to all computations
+
         self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[1],self.arch[0]+1))
         # self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]))
         self.weights_hidden_output = np.ones((self.arch[2], self.arch[1]))
@@ -36,6 +36,7 @@ class ExpNet:
                     result[i][j] *= B[k][j] ** A[i][k]
         return result
 
+
     def activation(self, act_input):
 
         biased_input = np.vstack([act_input, np.ones(len(act_input[0]))])
@@ -45,7 +46,7 @@ class ExpNet:
         # print(self.weights_hidden_output, "\n")
         #
         # print("act_hidden", act_hidden.shape)
-        # print(act_hidden)
+        # print(act_hidden, "\n")
 
 
         net_output = self.msupermul_left(self.weights_hidden_output, act_hidden)
@@ -73,7 +74,7 @@ class ExpNet:
     def learning(self, act_input, act_hidden, act_output, labels):
 
         biased_act_input = np.vstack([act_input, np.ones(len(act_input[0]))])
-        delta_output = (labels - act_output) * act_output
+        delta_output = (labels - act_output) / act_output
 
         delta_hidden = np.dot(self.weights_hidden_output[:, :self.arch[1]].transpose(), delta_output) * \
                        self.activation_funcions[0].apply_derived(act_hidden)
@@ -86,4 +87,45 @@ class ExpNet:
         self.weights_input_hidden += (self.learning_rate) * weight_change_hidden
         return True
 
+from net_util import Exp, Tahn
+exp = Exp()
+tahn = Tahn()
+n = ExpNet([2,3,1], [tahn,exp], 0.5)
 
+w_hid = np.array(
+[[2.726795083003882, 0.7615135982311503, 0.988217528686029],
+[2.2420442598488437, -1.4929417166690235, 2.4539262179673704  ],
+[0.8710175789190617, 0.5619429562832592, 0.16001984371656253 ]
+    ])
+print("w_hid", w_hid.shape ,"\n",w_hid, "\n")
+n.weights_input_hidden = w_hid
+
+input = np.reshape( np.array([0,0]), (2,1))
+print("input", input.shape,"\n", input, "\n")
+
+h, y = n.activation(input)
+
+print("act_hidden", h.shape)
+print(h, "\n")
+print("y\n", y, "\n")
+
+
+'''
+weights[layer]
+2.726795083003882 0.7615135982311503 0.988217528686029 
+2.2420442598488437 -1.4929417166690235 2.4539262179673704 
+0.8710175789190617 0.5619429562832592 0.16001984371656253 
+
+state.activation[layer]
+0.0 
+0.0 
+
+state.activation[layer + 1]
+0.7566012477015271 
+0.9853316979059518 
+0.15866784849975385 
+
+state.activation[layer + 2]
+0.11828738752997277 
+
+'''
