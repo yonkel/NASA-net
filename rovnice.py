@@ -91,34 +91,42 @@ def kontrola(A, B ):
 
 if __name__ == '__main__':
 
-    W_ = [ 1.0, 1.0, 1.0 ]
-    h_ = [
-        0.6791076844250947,
-        - 0.9958341879728652,
-        0.26359534306964494
-    ]
-    y = [0.7239687310440837 ]
+    # W_ = [ 1.0, 1.0, 1.0 ]
+    # h_ = [
+    #     0.6791076844250947,
+    #     - 0.9958341879728652,
+    #     0.26359534306964494
+    # ]
+    # y = [0.7239687310440837 ]
+    #
+    # W = np.reshape( np.array(W_), (1,3))
+    # h = np.reshape( np.array(h_), (3,1))
+    # # print(W, '\n', W.shape ,'\n')
+    # # print(h, '\n',h.shape, '\n',)
+    #
+    # # ll = left(W, h) #np.exp(A @ np.log(B))
+    # # print(ll, ll.shape)
+    #
+    # # rr = right(W, h) #np.exp(np.log(A) @ B)
+    # # print(rr, rr.shape)
+    #
+    # print(left(W,h))
+    # print(msupermul_left(W,h))
+    # print(right(W,h))
+    #
+    # h2_ = [
+    # 0.8438934893172371,
+    # 0.9974878639235529,
+    # 0.8600516872658023,
+    # ]
 
-    W = np.reshape( np.array(W_), (1,3))
-    h = np.reshape( np.array(h_), (3,1))
-    # print(W, '\n', W.shape ,'\n')
-    # print(h, '\n',h.shape, '\n',)
 
-    # ll = left(W, h) #np.exp(A @ np.log(B))
-    # print(ll, ll.shape)
+    a = np.random.rand(3,3)
+    b = np.random.rand(3,3)
 
-    # rr = right(W, h) #np.exp(np.log(A) @ B)
-    # print(rr, rr.shape)
-
-    print(left(W,h))
-    print(msupermul_left(W,h))
-    print(right(W,h))
-
-    h2_ = [
-    0.8438934893172371,
-    0.9974878639235529,
-    0.8600516872658023,
-    ]
+    print(a @ b.T)
+    print()
+    print( (b @ a.T).T )
 
 
 
