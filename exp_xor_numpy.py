@@ -10,7 +10,7 @@ from net_util import SigmoidNp, Exp, Tahn
 inputs = np.array([[0, 0, 1, 1],[0, 1, 0, 1]]).astype(np.float32)
 labels = np.array([[0, 1, 1, 0]]).astype(np.float32)
 
-architecture = [2, 10, 1]
+architecture = [2, 2, 1]
 learning_rate = 0.5
 max_epoch = 1000
 minibatch_size = 1
@@ -19,6 +19,7 @@ dataset_size = len(inputs[0])
 sigmoid = SigmoidNp()
 exp = Exp()
 tahn = Tahn()
+
 network = ExpNet(architecture, [tahn,exp], learning_rate)
 performance = []
 

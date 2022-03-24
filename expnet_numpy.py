@@ -48,8 +48,13 @@ class ExpNet:
         # print("act_hidden", act_hidden.shape)
         # print(act_hidden, "\n")
 
+        # act_hidden = np.reshape(np.array([0.7566012477015271,
+        #                                   0.9853316979059518,
+        #                                   0.15866784849975385, ]), (3, 1)
+        #                        )
+    
 
-        net_output = self.msupermul_left(self.weights_hidden_output, act_hidden)
+        act_output = self.msupermul_left(self.weights_hidden_output, act_hidden)
 
 
 
@@ -57,7 +62,7 @@ class ExpNet:
         # print(net_output)
         # input()
 
-        act_output = self.activation_funcions[1].apply_func( net_output )
+        # act_output = self.activation_funcions[1].apply_func( net_output )
 
         # print("act_output", act_output.shape)
         # print(act_output)
@@ -127,5 +132,4 @@ state.activation[layer + 1]
 
 state.activation[layer + 2]
 0.11828738752997277 
-
 '''
