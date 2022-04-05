@@ -67,7 +67,11 @@ class Exp:
         pass
 
     def apply_func(self, net):
-        return np.exp(net)
+        print("aktivacia nie je implementovana")
+        return None
+
+        # result = np.exp(A @ np.log(B))
+
 
     def apply_derived(self, output):
         return 1 - output*output

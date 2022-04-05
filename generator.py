@@ -1,8 +1,19 @@
 def parita(n):
     inputs, labels = [],[]
 
-    # for i in range(n+1):
-    #     [ list(bin(x)[2:].rjust(n, '0')) for x in range(2 ** n)]
+    inputs = [list(bin(x)[2:].rjust(n, '0')) for x in range(2 ** n)]
+    for i in range(len(inputs)):
+        inputs[i] = list(map(int, inputs[i]))
+        if inputs[i].count(1) % 2 == 0 :
+            labels.append([0])
+        else:
+            labels.append([1])
+
+    return inputs, labels
+
+
+def paritaJedna(n):
+    inputs, labels = [],[]
 
     inputs = [list(bin(x)[2:].rjust(n, '0')) for x in range(2 ** n)]
     for i in range(len(inputs)):
@@ -18,8 +29,9 @@ def parita(n):
 
     return inputs, labels
 
-inp, lab = parita(3)
 
+inp, lab = paritaJedna(3)
+#
 for i in range(len(inp)):
     print( inp[i], lab[i]  )
 

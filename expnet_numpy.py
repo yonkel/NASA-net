@@ -21,12 +21,7 @@ class ExpNet:
         # print(self.weights_hidden_output.shape)
         # input() #sedi (1,8)
 
-    def msupermul_left(self, A, B):  # left supermultiplication A**B is B^A = exp(A*ln(B))
-        result = np.exp(A @ np.log(B))
-        return result
-
-    def apply_func(self, A, B):
-
+    def msupermul_left(self, A, B):
         rows = A.shape[0]
         columns = B.shape[1]
         result = np.ones((rows, columns))
