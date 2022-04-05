@@ -76,7 +76,6 @@ class Exp2:
     def __init__(self):
         pass
 
-    def apply_func(self, net):
         return np.exp(net)
 
     def apply_derived(self, output):
