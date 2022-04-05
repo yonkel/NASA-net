@@ -32,11 +32,12 @@ for epoch in range(max_epoch):
         input_batch = inputs[:, indexer[i:i+minibatch_size]]
         label_batch = labels[:, indexer[i:i+minibatch_size]]
 
-        print(input_batch,  input_batch.shape)
-        input("nieco")
+        # print(input_batch,  input_batch.shape)
+        # input("nieco")
 
         act_hidden,act_output = network.activation(input_batch)
         network.learning(input_batch, act_hidden, act_output, label_batch)
+
     _, test_output = network.activation(inputs)
     arg_out = (test_output > 0.5).astype(np.float32)
     score = np.sum(arg_out == labels)
