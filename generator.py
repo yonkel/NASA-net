@@ -12,7 +12,7 @@ def parita(n):
     return inputs, labels
 
 
-def paritaJedna(n):
+def paritaMinus(n):
     inputs, labels = [],[]
 
     inputs = [list(bin(x)[2:].rjust(n, '0')) for x in range(2 ** n)]
@@ -29,23 +29,13 @@ def paritaJedna(n):
 
     return inputs, labels
 
+if __name__ == "__main__":
+    inp, lab = paritaMinus(3)
+    #
+    for i in range(len(inp)):
+        print( inp[i], lab[i]  )
 
-inp, lab = paritaJedna(3)
-#
-for i in range(len(inp)):
-    print( inp[i], lab[i]  )
 
+    # print(inp)
+    # print(lab)
 
-# print(inp)
-# print(lab)
-
-'''
-[0, 0, 0] [-1]
-[0, 0, 1] [1]
-[0, 1, 0] [1]
-[0, 1, 1] [-1]
-[1, 0, 0] [1]
-[1, 0, 1] [-1]
-[1, 1, 0] [-1]
-[1, 1, 1] [1]
-'''
