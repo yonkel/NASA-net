@@ -7,7 +7,7 @@ exp = Exp()
 tahn = Tahn()
 from generator import parita, paritaMinus
 
-p = 7
+p = 3
 inputs, labels = paritaMinus(p)
 
 # print(inputs)
@@ -17,20 +17,24 @@ inputs, labels = paritaMinus(p)
 # labels = [[0], [1], [1], [0]]
 
 
-architecture = [p,7,1]
+architecture = [p,4,1]
 learning_rate = 0.5
-max_epoch = 12000
+max_epoch = 1000
 
-repetitions = 10
+repetitions = 100
 success_window = 10
 epochs_to_success = []
 nets_successful = 0
-
+#
+# for arch in 6,7,8,9,10,11:
+#     print(f"\nArch = {arch}")
+#     architecture = [p, arch, 1]
 for n in range(repetitions):
     network = ExpNet(architecture,[tahn, exp] ,learning_rate)
     indexer = list(range(len(inputs)))
     success_global = 0
     epoch = 0
+    succ_max = 0
     while success_global < success_window and epoch < max_epoch:
         random.shuffle(indexer)
         success_epoch = 0
@@ -43,13 +47,18 @@ for n in range(repetitions):
             network.learning(intput, act_hidden, act_output, labels[i])
         if success_epoch == 2**p:
             success_global += 1
+        if success_epoch > succ_max:
+            succ_max = success_epoch
         epoch += 1
-    print("XOR repetition {} sucess {}. Epochs to success: {}".format(n,(success_epoch == 2**p),epoch))
+    print("XOR repetition {} sucess {}. Epochs to success: {}. {} out of {}".format(n,(success_epoch == 2**p),epoch, succ_max, 2**p ))
     epochs_to_success.append(epoch)
     if success_global == success_window:
         nets_successful += 1
 
 print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
 
+
+
+
 plt.plot(list(range(repetitions)),epochs_to_success)
-plt.show()
+# plt.show()

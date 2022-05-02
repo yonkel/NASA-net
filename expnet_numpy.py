@@ -1,4 +1,5 @@
 import numpy as np
+from net_util import SigmoidNp
 
 
 class ExpNet:
@@ -15,11 +16,12 @@ class ExpNet:
         self.init_weight_variance = init_w_variance
 
         self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[1],self.arch[0]+1))
-        # self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]))
-        self.weights_hidden_output = np.ones((self.arch[2], self.arch[1]))
+        self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]))
+        # self.weights_hidden_output = np.ones((self.arch[2], self.arch[1]))
 
         # print(self.weights_hidden_output.shape)
         # input() #sedi (1,8)
+        self.sigmoid = SigmoidNp()
 
     def msupermul_left(self, A, B):
         rows = A.shape[0]
@@ -31,60 +33,65 @@ class ExpNet:
                     result[i][j] *= B[k][j] ** A[i][k]
         return result
 
+    def quasiPow(self, base, exp):
+        return 1 - exp * ( 1 - base )
+
+    def mquasimul_left(self, A, B):
+        sigmo = SigmoidNp()
+        rows = A.shape[0]
+        columns = B.shape[1]
+        result = np.ones((rows, columns))
+        for i in range(rows):
+            for j in range(columns):
+                for k in range(A.shape[1]):
+                    result[i][j] *= self.quasiPow( B[k][j] ,sigmo.apply_func(A[i][k]) )
+        return result
+
 
     def activation(self, act_input):
 
         biased_input = np.vstack([act_input, np.ones(len(act_input[0]))])
         act_hidden = self.activation_funcions[0].apply_func(np.dot(self.weights_input_hidden, biased_input))
 
-        # print("self.weights_hidden_output ",self.weights_hidden_output.shape)
-        # print(self.weights_hidden_output, "\n")
-        #
-        # print("act_hidden", act_hidden.shape)
-        # print(act_hidden, "\n")
 
-        # act_hidden = np.reshape(np.array([0.7566012477015271,
-        #                                   0.9853316979059518,
-        #                                   0.15866784849975385, ]), (3, 1)
-        #                        )
-    
+        act_output = self.mquasimul_left(self.weights_hidden_output, act_hidden)
 
-        act_output = self.msupermul_left(self.weights_hidden_output, act_hidden)
-
-
-
-        # print("net_output", net_output.shape)
-        # print(net_output)
-        # input()
-
-        # act_output = self.activation_funcions[1].apply_func( net_output )
-
-        # print("act_output", act_output.shape)
-        # print(act_output)
-        #
-        # input()
 
         return act_hidden, act_output
 
-    # BP from ICI slides:
-    # w_{jk} += \alpha \delta_{k}h_{j}
-    # \delta_{k}=(d_{k} - y_{k}) f'_{k},
-    # v_{ij} += \alpha \delta_{j} x_{i}
-    # \delta_{j}=(\sum_{k}w_{jk}\delta_{k}) f'_{j},
     def learning(self, act_input, act_hidden, act_output, labels):
         biased_act_input = np.vstack([act_input, np.ones(len(act_input[0]))])
+        weight_change_output = self.weights_hidden_output.copy()
+        error_hid = act_hidden.copy()
 
         error_out = (labels - act_output)
         delta_output = error_out * act_output
 
-        error_hid = np.dot(self.weights_hidden_output[:, :self.arch[1]].transpose(), delta_output) / act_hidden
+        for j in range(self.arch[1]):
+            tmp = 0
+            for k in range(self.arch[2]):
+                logistic_degree = self.sigmoid.apply_func(self.weights_hidden_output[k][j])
+
+                term = self.quasiPow(act_hidden[j][0], logistic_degree)
+
+                term = delta_output[k] / term
+
+                weight_change_output = term * (act_hidden[j] - 1) * logistic_degree * (1 - logistic_degree)
+
+                tmp += term * logistic_degree
+
+            error_hid[j] = tmp
+
+
+        # error_hid = np.dot(self.weights_hidden_output[:, :self.arch[1]].transpose(), delta_output) / act_hidden
         delta_hidden = error_hid * self.activation_funcions[0].apply_derived(act_hidden)
+
 
         # weight_change_output = np.dot(act_hidden, delta_output.transpose()).transpose()
         weight_change_hidden = np.dot(biased_act_input, delta_hidden.transpose()).transpose() # a @ b.T == (b @ a.T).T
 
 
-        # self.weights_hidden_output += (self.learning_rate) * weight_change_output
+        self.weights_hidden_output += (self.learning_rate) * weight_change_output
         self.weights_input_hidden += (self.learning_rate) * weight_change_hidden
 
 

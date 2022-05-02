@@ -3,7 +3,7 @@ import math
 
 import numpy as np
 import random
-
+import net_util
 
 # povedzme teoreticky ze mame iba jednu skrytu vrstvu
 # vahy W_hid, W_out
@@ -85,7 +85,26 @@ def kontrola(A, B ):
 #         for j in range(columns):
 #             for k in range(A.size[1]): --> sum[for all j]
 #               result[i][j] += D[i][k] * log( Y[k][j] )
-#  a to teoreticky mozem spravit ako D @ log( Y ) ??????????
+#  teoreticky mozem spravit cez vektor ako D @ log( Y ) ??????????
+
+
+sigmo = net_util.SigmoidNp()
+
+
+def quasiPow( base, exp):
+    return 1 - exp * (1 - base)
+
+def mquasimul_left( A, B):
+        rows = A.shape[0]
+        columns = B.shape[1]
+        result = np.ones((rows, columns))
+        for i in range(rows):
+            for j in range(columns):
+                for k in range(A.shape[1]):
+
+                    result[i][j] *= quasiPow( B[k][j] ,sigmo.apply_func(A[i][k]) )
+        return result
+
 
 
 
@@ -124,10 +143,11 @@ if __name__ == '__main__':
     a = np.random.rand(3,3)
     b = np.random.rand(3,3)
 
-    print(a @ b.T)
-    print()
-    print( (b @ a.T).T )
+    # print(a @ b.T)
+    # print()
+    # print( (b @ a.T).T )
 
+    print(mquasimul_left(a,b))
 
 
 
