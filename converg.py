@@ -7,8 +7,7 @@ exp = Exp()
 tahn = Tahn()
 from generator import parita, paritaMinus
 
-p = 2
-inputs, labels = paritaMinus(p)
+
 
 # print(inputs)
 # input("nieco")
@@ -19,9 +18,12 @@ inputs, labels = paritaMinus(p)
 
 
 
-def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels ):
+def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
     nets_successful = 0
     epochs_to_success = []
+    epoch_sum = 0
+    p = len(inputs[0])
+    # print(inputs[0])
     for n in range(repetitions):
         network = net_type(architecture, [tahn, exp], learning_rate)
         indexer = list(range(len(inputs)))
@@ -43,25 +45,34 @@ def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions,
             if success_epoch > succ_max:
                 succ_max = success_epoch
             epoch += 1
-        print("XOR repetition {} sucess {}. Epochs to success: {}. {} out of {}".format(n,(success_epoch == 2**p),epoch, succ_max, 2**p ))
-        epochs_to_success.append(epoch)
+        if show:
+            print("XOR repetition {} sucess {}. Epochs to success: {}. {} out of {}".format(n,(success_epoch == 2**p),epoch, succ_max, 2**p ))
+            epochs_to_success.append(epoch)
         if success_global == success_window:
             nets_successful += 1
 
-    print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
-    return nets_successful/repetitions
+        epoch_sum += epoch
+        # if you want avg only from successful nets, tab the line above
+
+    if show:
+        print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
+        plt.plot(list(range(repetitions)),epochs_to_success)
+        plt.show()
+
+    return nets_successful / repetitions, epoch_sum / repetitions
 
 
-    plt.plot(list(range(repetitions)),epochs_to_success)
-    plt.show()
+if __name__ == "__main__":
+    pass
+    p = 3
+    inputs, labels = paritaMinus(p)
 
+    architecture = [p,3,1]
+    learning_rate = 0.5
+    max_epoch = 1000
+    repetitions = 100
+    success_window = 10
+    net_type = ExpNet
 
-architecture = [p,3,1]
-learning_rate = 0.5
-max_epoch = 1000
-repetitions = 100
-success_window = 10
-net_type = ExpNet
-
-x = convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels )
-print(x)
+    x = convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels, True )
+    print(x)
