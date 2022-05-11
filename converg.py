@@ -49,8 +49,7 @@ def convergenciaExp( architecture, learning_rate, max_epoch, repetitions, succes
             nets_successful += 1
 
     print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
-
-
+    return nets_successful/repetitions
 
 
     plt.plot(list(range(repetitions)),epochs_to_success)
@@ -60,8 +59,8 @@ def convergenciaExp( architecture, learning_rate, max_epoch, repetitions, succes
 architecture = [p,3,1]
 learning_rate = 0.5
 max_epoch = 1000
-
 repetitions = 100
 success_window = 10
 
-convergenciaExp( architecture, learning_rate, max_epoch, repetitions, success_window, inputs, labels )
+x = convergenciaExp( architecture, learning_rate, max_epoch, repetitions, success_window, inputs, labels )
+print(x)
