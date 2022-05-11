@@ -7,7 +7,7 @@ exp = Exp()
 tahn = Tahn()
 from generator import parita, paritaMinus
 
-p = 3
+p = 2
 inputs, labels = paritaMinus(p)
 
 # print(inputs)
@@ -17,7 +17,7 @@ inputs, labels = paritaMinus(p)
 # labels = [[0], [1], [1], [0]]
 
 
-architecture = [p,4,1]
+architecture = [p,5,1]
 learning_rate = 0.5
 max_epoch = 1000
 
