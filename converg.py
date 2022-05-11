@@ -19,11 +19,11 @@ inputs, labels = paritaMinus(p)
 
 
 
-def convergenciaExp( architecture, learning_rate, max_epoch, repetitions, success_window, inputs, labels ):
+def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels ):
     nets_successful = 0
     epochs_to_success = []
     for n in range(repetitions):
-        network = ExpNet(architecture, [tahn, exp], learning_rate)
+        network = net_type(architecture, [tahn, exp], learning_rate)
         indexer = list(range(len(inputs)))
         success_global = 0
         epoch = 0
@@ -61,6 +61,7 @@ learning_rate = 0.5
 max_epoch = 1000
 repetitions = 100
 success_window = 10
+net_type = ExpNet
 
-x = convergenciaExp( architecture, learning_rate, max_epoch, repetitions, success_window, inputs, labels )
+x = convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels )
 print(x)
