@@ -1,31 +1,23 @@
 import random
+import time
+import numpy as np
 import matplotlib.pyplot as plt
 from expnet_numpy import ExpNet
-from net_util import SigmoidNp, Exp, Tahn
-import numpy as np
+from net_util import Exp, Tahn
+from generator import paritaMinus
 exp = Exp()
 tahn = Tahn()
-from generator import parita, paritaMinus
 
 
-
-# print(inputs)
-# input("nieco")
-
-# inputs = [[0,0],[0,1],[1,0],[1,1]]
-# labels = [[0], [1], [1], [0]]
-
-
-
-
-def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
+def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
+    start_time = time.time()
     nets_successful = 0
     epochs_to_success = []
     epoch_sum = 0
     p = len(inputs[0])
     # print(inputs[0])
     for n in range(repetitions):
-        network = net_type(architecture, [tahn, exp], learning_rate)
+        network = net_type(architecture, act_func, learning_rate)
         indexer = list(range(len(inputs)))
         success_global = 0
         epoch = 0
@@ -47,10 +39,9 @@ def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions,
             epoch += 1
         if show:
             print("XOR repetition {} sucess {}. Epochs to success: {}. {} out of {}".format(n,(success_epoch == 2**p),epoch, succ_max, 2**p ))
-            epochs_to_success.append(epoch)
+        epochs_to_success.append(epoch)
         if success_global == success_window:
             nets_successful += 1
-
         epoch_sum += epoch
         # if you want avg only from successful nets, tab the line above
 
@@ -59,7 +50,9 @@ def convergencia( architecture, net_type, learning_rate, max_epoch, repetitions,
         plt.plot(list(range(repetitions)),epochs_to_success)
         plt.show()
 
-    return nets_successful / repetitions, epoch_sum / repetitions
+    end_time = time.time()
+
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time)}
 
 
 if __name__ == "__main__":
@@ -73,6 +66,7 @@ if __name__ == "__main__":
     repetitions = 100
     success_window = 10
     net_type = ExpNet
+    act_fun = [tahn, exp]
 
-    x = convergencia( architecture, net_type, learning_rate, max_epoch, repetitions, success_window, inputs, labels, True )
+    x = convergencia( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, success_window, inputs, labels, True)
     print(x)
