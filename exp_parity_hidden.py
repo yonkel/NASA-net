@@ -1,6 +1,4 @@
-import random
-import numpy as np
-import matplotlib.pyplot as plt
+import time
 from expnet_numpy import ExpNet
 from perceptron_numpy import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
@@ -25,6 +23,9 @@ plot_expnet_nets = []
 plot_expnet_epc = []
 plot_mlp_nets = []
 plot_mlp_epc = []
+
+exp_start = time.time()
+
 for h in hidden_size:
     print("Testing hidden size: {}".format(h))
     architecture = [p, h, 1]
@@ -50,6 +51,13 @@ for h in hidden_size:
     ))
     plot_mlp_nets.append("{} {}\n".format(h, results_mlp["nets"]))
     plot_mlp_epc.append(("{} {} {}\n".format(h, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
+
+exp_end = time.time()
+runtime = exp_end - exp_start
+m, s = divmod(runtime, 60)
+h, m = divmod(m, 60)
+print(s)
+print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 with open('results/mulnet_parity{}_hidden_nets.txt'.format(p), 'w') as f:
     f.write('x y\n')

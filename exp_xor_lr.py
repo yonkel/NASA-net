@@ -1,6 +1,4 @@
-import random
-import numpy as np
-import matplotlib.pyplot as plt
+import time
 from expnet_numpy import ExpNet
 from perceptron_numpy import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
@@ -16,8 +14,8 @@ p = 2
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
 hidden_size = 2
-max_epoch = 500
-repetitions = 10
+max_epoch = 600
+repetitions = 5
 success_window = 10
 
 learning_rate = [0.1,0.3,0.5,0.7,0.9,1.0,1.2]
@@ -25,6 +23,9 @@ plot_expnet_nets = []
 plot_expnet_epc = []
 plot_mlp_nets = []
 plot_mlp_epc = []
+
+exp_start = time.time()
+
 for lr in learning_rate:
     print("Testing learning rate: {}".format(lr))
     architecture = [p, hidden_size, 1]
@@ -50,6 +51,13 @@ for lr in learning_rate:
     ))
     plot_mlp_nets.append("{} {}\n".format(lr, results_mlp["nets"]))
     plot_mlp_epc.append(("{} {} {}\n".format(lr, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
+
+exp_end = time.time()
+runtime = exp_end - exp_start
+m, s = divmod(runtime, 60)
+h, m = divmod(m, 60)
+print(s)
+print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 with open('results/mulnet_xor_hidden_nets.txt', 'w') as f:
     f.write('x y\n')
