@@ -5,12 +5,13 @@ from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
 from converg import convergencia
 from statistics import mean, stdev
+from util import save_results
 
 exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
 
-p = 4
+p = 2
 expname = 'parity{}_lr'.format(p)
 if p == 2:
     expname = 'xor_lr'
@@ -21,7 +22,7 @@ max_epoch = 1000
 repetitions = 100
 success_window = 10
 
-hidden_size = [2,4,6,8,10,15,20]
+hidden_size = [2,4]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
@@ -62,17 +63,23 @@ h, m = divmod(m, 60)
 print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
-with open('results/mulnet_{}_nets.txt'.format(expname), 'w') as f:
-    f.write('x y\n')
-    f.writelines(plot_expnet_nets)
-with open('results/mulnet_{}_epcs.txt'.format(expname), 'w') as f:
-    f.write('x y err\n')
-    f.writelines(plot_expnet_epcs)
-with open('results/mlp_{}_nets.txt'.format(expname), 'w') as f:
-    f.write('x y\n')
-    f.writelines(plot_mlp_nets)
-with open('results/mlp_{}_epcs.txt'.format(expname), 'w') as f:
-    f.write('x y err\n')
-    f.writelines(plot_mlp_epc)
+
+save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
+save_results("mlp", expname, plot_mlp_nets, plot_mlp_epc)
+
+
+
+# with open('results/mulnet_{}_nets.txt'.format(expname), 'w') as f:
+#     f.write('x y\n')
+#     f.writelines(plot_expnet_nets)
+# with open('results/mulnet_{}_epcs.txt'.format(expname), 'w') as f:
+#     f.write('x y err\n')
+#     f.writelines(plot_expnet_epcs)
+# with open('results/mlp_{}_nets.txt'.format(expname), 'w') as f:
+#     f.write('x y\n')
+#     f.writelines(plot_mlp_nets)
+# with open('results/mlp_{}_epcs.txt'.format(expname), 'w') as f:
+#     f.write('x y err\n')
+#     f.writelines(plot_mlp_epc)
 
 
