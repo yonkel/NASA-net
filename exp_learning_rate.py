@@ -23,7 +23,7 @@ success_window = 10
 
 learning_rate = [0.1,0.3,0.5,0.7,0.9,1.0,1.2]
 plot_expnet_nets = []
-plot_expnet_epc = []
+plot_expnet_epcs = []
 plot_mlp_nets = []
 plot_mlp_epc = []
 
