@@ -81,5 +81,3 @@ save_results("mlp", expname, plot_mlp_nets, plot_mlp_epcs)
 # with open('results/mlp_{}_epcs.txt'.format(expname), 'w') as f:
 #     f.write('x y err\n')
 #     f.writelines(plot_mlp_epcs)
-
-
