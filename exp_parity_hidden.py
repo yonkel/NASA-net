@@ -64,7 +64,7 @@ with open('results/mulnet_parity{}_hidden_nets.txt'.format(p), 'w') as f:
     f.writelines(plot_expnet_nets)
 with open('results/mulnet_parity{}_hidden_epcs.txt'.format(p), 'w') as f:
     f.write('x y err\n')
-    f.writelines(plot_expnet_nets)
+    f.writelines(plot_expnet_epc)
 with open('results/mlp_parity{}_hidden_nets.txt'.format(p), 'w') as f:
     f.write('x y\n')
     f.writelines(plot_mlp_nets)
