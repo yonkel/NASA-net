@@ -3,25 +3,25 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from expnet_numpy import ExpNet
-from net_util import Exp, Tahn
+from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
-exp = Exp()
-tahn = Tahn()
 from perceptron_numpy import Perceptron
 
-def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
+exp = Exp()
+tahn = Tahn()
+sigmoid = SigmoidNp()
 
+
+def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
     threshold = 0.5
     label = 0
-
     for item in labels:
         if item[0] == -1:
-            threshold = -0.5
+            threshold = 0
             label = -1
             break
         if item[0] == 0:
             break
-
     start_time = time.time()
     nets_successful = 0
     epochs_to_success = []
@@ -41,7 +41,7 @@ def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, re
                 intput = np.reshape(inputs[i], (p,1))
                 act_hidden,act_output = network.activation(intput)
                 # print("e{0}: {1} >> {2} | {3}".format(epoch+1, inputs[i], act_output, labels[i]))
-                if act_output[0][0] >= 0.5 and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][0] == label:
+                if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][0] == label:
                     success_epoch += 1
                 network.learning(intput, act_hidden, act_output, labels[i])
             if success_epoch == 2**p:
@@ -71,14 +71,17 @@ if __name__ == "__main__":
     pass
     p = 2
     inputs, labels = paritaMinus(p)
+    # inputs, labels = parita(p)
 
-    architecture = [p,50,1]
+    architecture = [p,6,1]
     learning_rate = 0.5
-    max_epoch = 1000
-    repetitions = 100
+    max_epoch = 3000
+    repetitions = 10
     success_window = 10
-    net_type = Perceptron
+    net_type = ExpNet
     act_fun = [tahn, tahn]
+    # net_type = Perceptron
+    # act_fun = [sigmoid, sigmoid]
 
     x = convergencia( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, success_window, inputs, labels, True)
     print(x)

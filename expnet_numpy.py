@@ -1,9 +1,11 @@
+import math
+
 import numpy as np
 from net_util import SigmoidNp
 
 
 class ExpNet:
-    def __init__(self, layers, activation_funcions, learning_rate, init_w_mean=0.0, init_w_variance=0.02):
+    def __init__(self, layers, activation_funcions, learning_rate, init_w_mean=0.0, init_w_variance=1.0):
         # just to be sure let's remember the sizes of layers of our network we call it the network architecture
         # it's a simple list, I can imagine a dictionary may be even more readable {input: sth, hidden: ...
         # we assume only 3 layers
@@ -72,13 +74,33 @@ class ExpNet:
             for k in range(self.arch[2]):
                 logistic_degree = self.sigmoid.apply_func(self.weights_hidden_output[k][j])
 
-                term = self.quasiPow(act_hidden[j][0], logistic_degree)
+                common_term_j_k = self.quasiPow(act_hidden[j][0], logistic_degree)
 
-                term = delta_output[k] / term
+                # print("term",common_term_j_k)
+                # print("delta[k]",delta_output[k])
 
-                weight_change_output = term * (act_hidden[j] - 1) * logistic_degree * (1 - logistic_degree)
+                if common_term_j_k < 0.0000000001:
+                    # print("j=",j,",k=",k,",base=act_hidden[j][0]=",act_hidden[j][0],",degree=logistic(outputWeight)=",logistic_degree,",deltaOutput[k]=",delta_output[k],",quasiPow=",self.quasiPow(act_hidden[j][0], logistic_degree))
+                    # print("error_out[k]=",error_out[k][0],",act_output[k][0]=",act_output[k][0])
+                    # print("quasipow=(1-degree*(1-base)):(1-base)=",(1-act_hidden[j][0]),",degree*(1-base)=",(logistic_degree*(1-act_hidden[j][0])))
+                    common_term_j_k = 1.0;
+                    for j2 in range(self.arch[1]):
+                        if j2 != j:
+                            common_term_j_k *= self.quasiPow(act_hidden[j2][0], self.sigmoid.apply_func(self.weights_hidden_output[k][j2]))
+                    # print("productDerivative[k]=", common_term_j_k)
+                    common_term_j_k *= error_out[k][0]
+                else:
+                    common_term_j_k = delta_output[k] / common_term_j_k
 
-                tmp += term * logistic_degree
+                if (math.isnan(common_term_j_k)):
+                    print("j=",j,",k=",k,",base=act_hidden[j][0]=",act_hidden[j][0],",degree=logistic(outputWeight)=",logistic_degree,",deltaOutput[k]=",delta_output[k],",quasiPow=",self.quasiPow(act_hidden[j][0], logistic_degree))
+                    print("error_out[k]=",error_out[k][0],",act_output[k][0]=",act_output[k][0])
+                    print("quasipow=(1-degree*(1-base)):(1-base)=",(1-act_hidden[j][0]),",degree*(1-base)=",(logistic_degree*(1-act_hidden[j][0])))
+                    quit()
+
+                weight_change_output[k][j] = common_term_j_k * (act_hidden[j] - 1) * logistic_degree * (1 - logistic_degree)
+
+                tmp += common_term_j_k * logistic_degree
 
             error_hid[j] = tmp
 
