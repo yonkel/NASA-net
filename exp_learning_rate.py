@@ -11,6 +11,9 @@ tahn = Tahn()
 sigmoid = SigmoidNp()
 
 p = 2
+expname = 'parity{}_lr'.format(p)
+if p == 2:
+    expname = 'xor_lr'
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
 hidden_size = 2
@@ -59,16 +62,16 @@ h, m = divmod(m, 60)
 print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
-with open('results/mulnet_xor_hidden_nets.txt', 'w') as f:
+with open('results/mulnet_{}_nets.txt'.format(expname), 'w') as f:
     f.write('x y\n')
     f.writelines(plot_expnet_nets)
-with open('results/mulnet_xor_hidden_epcs.txt', 'w') as f:
+with open('results/mulnet_{}_epcs.txt'.format(expname), 'w') as f:
     f.write('x y err\n')
     f.writelines(plot_expnet_nets)
-with open('results/mlp_xor_hidden_nets.txt', 'w') as f:
+with open('results/mlp_{}_nets.txt'.format(expname), 'w') as f:
     f.write('x y\n')
     f.writelines(plot_mlp_nets)
-with open('results/mlp_xor_hidden_epcs.txt', 'w') as f:
+with open('results/mlp_{}_epcs.txt'.format(expname), 'w') as f:
     f.write('x y err\n')
     f.writelines(plot_mlp_epc)
 
