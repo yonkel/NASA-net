@@ -26,7 +26,7 @@ hidden_size = [2,4]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
-plot_mlp_epc = []
+plot_mlp_epcs = []
 
 exp_start = time.time()
 
@@ -54,7 +54,7 @@ for h in hidden_size:
         results_mlp["time"]
     ))
     plot_mlp_nets.append("{} {}\n".format(h, results_mlp["nets"]))
-    plot_mlp_epc.append(("{} {} {}\n".format(h, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
+    plot_mlp_epcs.append(("{} {} {}\n".format(h, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
 
 exp_end = time.time()
 runtime = exp_end - exp_start
@@ -65,7 +65,7 @@ print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round
 
 
 save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
-save_results("mlp", expname, plot_mlp_nets, plot_mlp_epc)
+save_results("mlp", expname, plot_mlp_nets, plot_mlp_epcs)
 
 
 
@@ -80,6 +80,6 @@ save_results("mlp", expname, plot_mlp_nets, plot_mlp_epc)
 #     f.writelines(plot_mlp_nets)
 # with open('results/mlp_{}_epcs.txt'.format(expname), 'w') as f:
 #     f.write('x y err\n')
-#     f.writelines(plot_mlp_epc)
+#     f.writelines(plot_mlp_epcs)
 
 
