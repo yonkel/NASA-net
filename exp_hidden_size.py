@@ -12,9 +12,9 @@ tahn = Tahn()
 sigmoid = SigmoidNp()
 
 p = 2
-expname = 'parity{}_lr'.format(p)
+expname = 'parity{}_hidden'.format(p)
 if p == 2:
-    expname = 'xor_lr'
+    expname = 'xor_hidden'
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
 learning_rate = 0.9
