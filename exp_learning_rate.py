@@ -42,7 +42,7 @@ for lr in learning_rate:
         results_expnet["time"]
     ))
     plot_expnet_nets.append("{} {}\n".format(lr, results_expnet["nets"]))
-    plot_expnet_epc.append("{} {} {}\n".format(lr, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
+    plot_expnet_epcs.append("{} {} {}\n".format(lr, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
     results_mlp = convergencia(architecture, Perceptron, [sigmoid, sigmoid], lr, max_epoch, repetitions,
                                success_window, inputs_binary, labels_binary, False)
     print("MLP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
@@ -67,7 +67,7 @@ with open('results/mulnet_{}_nets.txt'.format(expname), 'w') as f:
     f.writelines(plot_expnet_nets)
 with open('results/mulnet_{}_epcs.txt'.format(expname), 'w') as f:
     f.write('x y err\n')
-    f.writelines(plot_expnet_nets)
+    f.writelines(plot_expnet_epcs)
 with open('results/mlp_{}_nets.txt'.format(expname), 'w') as f:
     f.write('x y\n')
     f.writelines(plot_mlp_nets)

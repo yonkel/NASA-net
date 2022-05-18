@@ -10,20 +10,20 @@ exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
 
-p = 2
+p = 4
 expname = 'parity{}_lr'.format(p)
 if p == 2:
     expname = 'xor_lr'
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
-learning_rate = 0.5
-max_epoch = 3000
-repetitions = 1000
+learning_rate = 0.9
+max_epoch = 1000
+repetitions = 100
 success_window = 10
 
-hidden_size = [2,3,4,5,6,7,8]
+hidden_size = [2,4,6,8,10,15,20]
 plot_expnet_nets = []
-plot_expnet_epc = []
+plot_expnet_epcs = []
 plot_mlp_nets = []
 plot_mlp_epc = []
 
@@ -42,7 +42,7 @@ for h in hidden_size:
         results_expnet["time"]
     ))
     plot_expnet_nets.append("{} {}\n".format(h, results_expnet["nets"]))
-    plot_expnet_epc.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
+    plot_expnet_epcs.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
     results_mlp = convergencia(architecture, Perceptron, [sigmoid, sigmoid], learning_rate, max_epoch, repetitions,
                                success_window, inputs_binary, labels_binary, False)
     print("MLP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
@@ -67,7 +67,7 @@ with open('results/mulnet_{}_nets.txt'.format(expname), 'w') as f:
     f.writelines(plot_expnet_nets)
 with open('results/mulnet_{}_epcs.txt'.format(expname), 'w') as f:
     f.write('x y err\n')
-    f.writelines(plot_expnet_nets)
+    f.writelines(plot_expnet_epcs)
 with open('results/mlp_{}_nets.txt'.format(expname), 'w') as f:
     f.write('x y\n')
     f.writelines(plot_mlp_nets)
