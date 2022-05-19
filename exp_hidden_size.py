@@ -6,12 +6,13 @@ from generator import paritaMinus, parita
 from converg import convergencia
 from statistics import mean, stdev
 from util import save_results
+from util import load_json_parameters
 
 exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
 
-p = 2
+p = 4
 expname = 'parity{}_hidden'.format(p)
 if p == 2:
     expname = 'xor_hidden'
@@ -19,16 +20,20 @@ inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
 learning_rate = 0.9
 max_epoch = 1000
-repetitions = 100
+repetitions = 300
 success_window = 10
 
-hidden_size = [2,4]
+hidden_size = [9,10,11,12,15,18,21,25]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
 plot_mlp_epcs = []
 
 exp_start = time.time()
+
+
+
+
 
 for h in hidden_size:
     print("Testing hidden size: {}".format(h))

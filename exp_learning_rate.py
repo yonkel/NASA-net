@@ -6,6 +6,8 @@ from generator import paritaMinus, parita
 from converg import convergencia
 from statistics import mean, stdev
 from util import save_results
+from util import load_json_parameters
+
 
 exp = Exp()
 tahn = Tahn()
@@ -27,6 +29,22 @@ plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
 plot_mlp_epcs = []
+
+# parameters = load_json_parameters()
+# p = parameters["p"]
+# hidden_size = parameters["hidden_size"]
+# max_epoch = parameters["max_epoch"]
+# repetitions = parameters["repetitions"]
+# success_window = parameters["success_window"]
+# learning_rate = parameters["learning_rate"]
+#
+# print( p  )
+# print(  hidden_size )
+# print(  max_epoch )
+# print( repetitions  )
+# print(  success_window )
+# print(  learning_rate )
+
 
 exp_start = time.time()
 

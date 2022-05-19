@@ -3,40 +3,33 @@ import sys
 
 
 def save_results( net_name, exp_name, nets, epc):
-    with open(f'results/{net_name}_{exp_name}_nets.txt', 'w') as f:
+    with open(f'results/{net_name}_{exp_name}_nets.txt', 'a') as f:
         f.write('x y\n')
         f.writelines(nets)
-    with open(f'results/{net_name}_{exp_name}_epcs.txt', 'w') as f:
+    with open(f'results/{net_name}_{exp_name}_epcs.txt', 'a') as f:
         f.write('x y err\n')
         f.writelines(epc)
 
 
-def generate_parameters_hidden():
+def generate_parameters( experiment_name ):
     parameters = {
-        'parameters_mlp': {
+        'parameters': {
             'p': 2,
-            'learning_rate': 0.9,
+            'hidden_size': 2,
             'max_epoch': 1000,
             'repetitions': 100,
             'success_window': 10,
-            'hidden_size': [2, 4]
-        },
-        'parameters_mulnet': {
-            'p': 2,
-            'learning_rate': 0.9,
-            'max_epoch': 1000,
-            'repetitions': 100,
-            'success_window': 10,
-            'hidden_size': [2, 4]
+            'learning_rate': [0.3, 0.5, 0.7, 0.9, 1.0, 1.2]
         }
     }
 
-    with open('exp_hidden_parameters.json', 'w') as outfile:
+    with open(f'exp_{experiment_name}_parameters.json', 'w') as outfile:
         json_string = json.dumps(parameters, indent=4)
         outfile.write(json_string)
 
 
-def generate_parameters_lr():
+
+def generate_different_parameters( experiment_name ):
     parameters = {
         'parameters_mlp': {
             'p': 2,
@@ -56,31 +49,35 @@ def generate_parameters_lr():
         }
     }
 
-    with open('exp_lr_parameters.json', 'w') as outfile:
+    with open(f'exp_{experiment_name}_parameters.json', 'w') as outfile:
         json_string = json.dumps(parameters, indent=4)
         outfile.write(json_string)
 
 
 def load_json_parameters():
-    pass
+    file = str(sys.argv[1])
+    with open(file) as json_file:
+        parameters = json.load(json_file)
 
-#TODO 1. load funkcia pre Json, implementacia citania Jsonu
-#TODO 2. zovseobecnit generujucu funkciu, vytvorit parametre pre kazdu premm
-#TODO 3. napisat funkciu ktora bude podobna tymto ( prehladne sa menia parametre ), ktora na zaver zavola vseobecnu
+        if len(parameters.keys() )> 1:
+            par_mlp = parameters['parameters_mlp']
+            par_mulnnet = parameters['parameters_mulnet']
+            return par_mlp, par_mulnnet
+        else:
+            parameters = parameters['parameters']
+            return parameters
 
-
-# co treba : treba pripravit funkciu na citanie parametrov z jsonu -  nazov json suboru nacita z konzoly
-#            zmenit experimenty?, urobit 2 ?, zajtra zavolat kike...
+#TODO co keby sa parametre pre experimenty posuvali v slovniku
 
 
 
 if __name__ == '__main__':
     pass
 
-    generate_parameters_lr()
+    generate_parameters("lr")
 
     with open('exp_lr_parameters.json') as json_file:
         data = json.load(json_file)
 
-        print(data['parameters_mlp']['hidden_size'])
+        print(data['parameters']['hidden_size'])
 
