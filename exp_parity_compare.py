@@ -7,34 +7,27 @@ from converg import convergencia
 from statistics import mean, stdev
 from util import save_results, log_time
 
+expname = 'parity_compare'
+max_parity = 5
+hidden_size_expnet = {3:4, 4:6, 5:12, 6:12, 7:15}
+hidden_size_mlp = {3:9, 4:12, 5:50}
+learning_rate = 0.9
+max_epoch = 1000
+repetitions = 100
+success_window = 10
 exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
-
-p = 2
-expname = 'parity{}_hidden'.format(p)
-if p == 2:
-    expname = 'xor_hidden'
-inputs_minus, labels_minus = paritaMinus(p)
-inputs_binary, labels_binary = parita(p)
-learning_rate = 0.9
-wts_variance = 0.5
-max_epoch = 3000
-repetitions = 100
-success_window = 10
-
-hidden_size = [2,3,4,5,6,7,8]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
 plot_mlp_epcs = []
-
 exp_start = time.time()
-
-for h in hidden_size:
-    print("Testing hidden size: {}".format(h))
-    architecture = [p, h, 1]
-    results_expnet = convergencia(architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
+for p in range(2,max_parity+1):
+    inputs_minus, labels_minus = paritaMinus(p)
+    inputs_binary, labels_binary = parita(p)
+    print("Testing parity: {}".format(p))
+    results_expnet = convergencia([p, hidden_size_expnet[p], 1], ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
                                   success_window, inputs_minus, labels_minus, False)
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_expnet["nets"],
@@ -43,9 +36,9 @@ for h in hidden_size:
         stdev(results_expnet["epochs"]),
         results_expnet["time"]
     ))
-    plot_expnet_nets.append("{} {}\n".format(h, results_expnet["nets"]))
-    plot_expnet_epcs.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
-    results_mlp = convergencia(architecture, Perceptron, [sigmoid, sigmoid], learning_rate, max_epoch, repetitions,
+    plot_expnet_nets.append("{} {}\n".format(p, results_expnet["nets"]))
+    plot_expnet_epcs.append("{} {} {}\n".format(p, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
+    results_mlp = convergencia([p, hidden_size_mlp[p], 1], Perceptron, [sigmoid, sigmoid], learning_rate, max_epoch, repetitions,
                                success_window, inputs_binary, labels_binary, False)
     print("MLP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_mlp["nets"],
@@ -54,9 +47,9 @@ for h in hidden_size:
         stdev(results_mlp["epochs"]),
         results_mlp["time"]
     ))
-    plot_mlp_nets.append("{} {}\n".format(h, results_mlp["nets"]))
-    plot_mlp_epcs.append(("{} {} {}\n".format(h, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
-log_time(exp_start)
+    plot_mlp_nets.append("{} {}\n".format(p, results_mlp["nets"]))
+    plot_mlp_epcs.append(("{} {} {}\n".format(p, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
 
+log_time(exp_start)
 save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
 save_results("mlp", expname, plot_mlp_nets, plot_mlp_epcs)

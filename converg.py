@@ -12,7 +12,7 @@ tahn = Tahn()
 sigmoid = SigmoidNp()
 
 
-def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
+def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show, wts_mean=0.0, wts_variance=0.5):
     threshold = 0.5
     label = 0
     for item in labels:
@@ -29,7 +29,7 @@ def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, re
     p = len(inputs[0])
     # print(inputs[0])
     for n in range(repetitions):
-        network = net_type(architecture, act_func, learning_rate)
+        network = net_type(architecture, act_func, learning_rate, wts_mean, wts_variance)
         indexer = list(range(len(inputs)))
         success_global = 0
         epoch = 0
