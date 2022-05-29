@@ -13,18 +13,18 @@ exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
 
-p = 2
+p = 7
 expname = 'parity{}_lr'.format(p)
 if p == 2:
     expname = 'xor_lr'
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
-hidden_size = 2
-max_epoch = 600
-repetitions = 5
+hidden_size = 50
+max_epoch = 10000
+repetitions = 100
 success_window = 10
 
-learning_rate = [0.1,0.3,0.5,0.7,0.9,1.0,1.2]
+learning_rate = [0.1,0.3,0.6,0.9,1.0,1.2,1.4, 1.6]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
@@ -86,17 +86,5 @@ save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
 save_results("mlp", expname, plot_mlp_nets, plot_mlp_epcs)
 
 
-# with open('results/mulnet_{}_nets.txt'.format(expname), 'w') as f:
-#     f.write('x y\n')
-#     f.writelines(plot_expnet_nets)
-# with open('results/mulnet_{}_epcs.txt'.format(expname), 'w') as f:
-#     f.write('x y err\n')
-#     f.writelines(plot_expnet_epcs)
-# with open('results/mlp_{}_nets.txt'.format(expname), 'w') as f:
-#     f.write('x y\n')
-#     f.writelines(plot_mlp_nets)
-# with open('results/mlp_{}_epcs.txt'.format(expname), 'w') as f:
-#     f.write('x y err\n')
-#     f.writelines(plot_mlp_epcs)
 
 

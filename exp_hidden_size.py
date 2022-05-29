@@ -12,18 +12,18 @@ exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
 
-p = 4
+p = 7
 expname = 'parity{}_hidden'.format(p)
 if p == 2:
     expname = 'xor_hidden'
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
-learning_rate = 0.9
-max_epoch = 1000
-repetitions = 300
+learning_rate = 0.5
+max_epoch = 10000
+repetitions = 100
 success_window = 10
 
-hidden_size = [9,10,11,12,15,18,21,25]
+hidden_size = [35,40,45,50, 55, 60, 65, 70 ]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
@@ -38,17 +38,17 @@ exp_start = time.time()
 for h in hidden_size:
     print("Testing hidden size: {}".format(h))
     architecture = [p, h, 1]
-    results_expnet = convergencia(architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
-                                  success_window, inputs_minus, labels_minus, False)
-    print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
-        results_expnet["nets"],
-        repetitions,
-        mean(results_expnet["epochs"]),
-        stdev(results_expnet["epochs"]),
-        results_expnet["time"]
-    ))
-    plot_expnet_nets.append("{} {}\n".format(h, results_expnet["nets"]))
-    plot_expnet_epcs.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
+    # results_expnet = convergencia(architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
+    #                               success_window, inputs_minus, labels_minus, False)
+    # print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
+    #     results_expnet["nets"],
+    #     repetitions,
+    #     mean(results_expnet["epochs"]),
+    #     stdev(results_expnet["epochs"]),
+    #     results_expnet["time"]
+    # ))
+    # plot_expnet_nets.append("{} {}\n".format(h, results_expnet["nets"]))
+    # plot_expnet_epcs.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
     results_mlp = convergencia(architecture, Perceptron, [sigmoid, sigmoid], learning_rate, max_epoch, repetitions,
                                success_window, inputs_binary, labels_binary, False)
     print("MLP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
@@ -69,7 +69,7 @@ print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 
-save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
+# save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
 save_results("mlp", expname, plot_mlp_nets, plot_mlp_epcs)
 
 
