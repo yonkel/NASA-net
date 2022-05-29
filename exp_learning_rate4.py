@@ -25,7 +25,7 @@ max_epoch = 10000
 repetitions = 100
 success_window = 10
 
-learning_rate = [0.6, 0.9]
+learning_rate = [1.4, 1.6]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []

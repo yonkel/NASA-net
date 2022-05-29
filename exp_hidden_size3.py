@@ -23,7 +23,7 @@ max_epoch = 10000
 repetitions = 100
 success_window = 10
 
-hidden_size = [ 35,40 ]
+hidden_size = [55, 60 ]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_mlp_nets = []
