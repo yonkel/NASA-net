@@ -19,7 +19,8 @@ if p == 2:
     expname = 'xor_lr'
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
-hidden_size = 50
+hidden_size_mulnet = 15
+hidden_size_mlp = 50
 max_epoch = 10000
 repetitions = 100
 success_window = 10
@@ -50,7 +51,7 @@ exp_start = time.time()
 
 for lr in learning_rate:
     print("Testing learning rate: {}".format(lr))
-    architecture = [p, hidden_size, 1]
+    architecture = [p, hidden_size_mulnet, 1]
     results_expnet = convergencia(architecture, ExpNet, [tahn, exp], lr, max_epoch, repetitions,
                                   success_window, inputs_minus, labels_minus, False)
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
@@ -62,6 +63,7 @@ for lr in learning_rate:
     ))
     plot_expnet_nets.append("{} {}\n".format(lr, results_expnet["nets"]))
     plot_expnet_epcs.append("{} {} {}\n".format(lr, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
+    architecture = [p, hidden_size_mlp, 1]
     results_mlp = convergencia(architecture, Perceptron, [sigmoid, sigmoid], lr, max_epoch, repetitions,
                                success_window, inputs_binary, labels_binary, False)
     print("MLP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
