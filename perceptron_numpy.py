@@ -17,6 +17,16 @@ class Perceptron:
         self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[1],self.arch[0]+1))
         self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]+1))
 
+    def MSE(self, inputs, labels):
+        SSE = 0
+
+        for i in range(len(labels)):
+            intput = np.reshape(inputs[i], (2, 1))
+            act_hidden, act_output = self.activation(intput)
+            SSE += (labels[i][0] - act_output[0]) ** 2
+
+        return SSE / len(labels)
+
     def activation(self, act_input):
         biased_input = np.vstack([act_input, np.ones(len(act_input[0]))])
         act_hidden = self.activation_funcions[0].apply_func(
@@ -27,6 +37,7 @@ class Perceptron:
             np.dot(self.weights_hidden_output, biased_act_hidden)
         )
         return act_hidden, act_output
+
 
     # BP from ICI slides:
     # w_{jk} += \alpha \delta_{k}h_{j}

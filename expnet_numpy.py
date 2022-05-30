@@ -49,6 +49,15 @@ class ExpNet:
                     result[i][j] *= self.quasiPow( B[k][j] ,sigmo.apply_func(A[i][k]) )
         return result
 
+    def MSE(self, inputs, labels):
+        SSE = 0
+
+        for i in range(len(labels)):
+            intput = np.reshape(inputs[i], (2, 1))
+            act_hidden, act_output = self.activation(intput)
+            SSE += ( labels[i][0] - act_output[0] )**2
+
+        return SSE / len(labels)
 
     def activation(self, act_input):
 
