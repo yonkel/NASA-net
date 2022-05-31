@@ -40,15 +40,16 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         indexer = list(range(len(inputs)))
         epoch = 0
 
+        properly_determined = 0
 
         mse = 999
-        while mse > wanted_MSE and epoch < max_epoch:
+        while mse > wanted_MSE and epoch < max_epoch and properly_determined / len(inputs) < 0.95 :
             random.shuffle(indexer)
             properly_determined = 0
 
             for i in indexer:
                 intput = np.reshape(inputs[i], (2,1))
-                act_hidden,act_output = network.activation(intput)
+                act_hidden, act_output = network.activation(intput)
                 network.learning(intput, act_hidden, act_output, labels[i])
 
                 if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][0] == lower_label:
@@ -59,15 +60,18 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
             if epoch % 20 == 0:
                 mse = network.MSE(test_inputs, test_labels)
 
-                print(f" Network {n}, epoch {epoch}, MSE {mse}, properly determined {properly_determined} = {(properly_determined / len(inputs) * 100 )}%")
+
+            if epoch % 500 == 0:
+                print(f" Network {n}, epoch {epoch}, MSE {mse}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
+
 
 
 
         if show:
-            print("Spirals repetition {} sucess {}. Epochs to success: {}. MSE {} ".format(n,mse,epoch, mse ))
+            print("Convergence repetition {} sucess {}. Epochs to success: {}. MSE {} ".format(n,mse,epoch, mse ))
         epochs_to_success.append(epoch)
 
-        if mse <=  wanted_MSE:
+        if mse <= wanted_MSE or properly_determined / len(inputs) >= 0.95:
             nets_successful += 1
         epoch_sum += epoch
 
