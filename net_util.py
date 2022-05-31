@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from decimal import Decimal
 
 
 class SigmoidNp:
@@ -80,7 +81,7 @@ class Exp2:
     def __init__(self):
         pass
 
-        return np.exp(net)
+
 
     def apply_derived(self, output):
         if output >= 0:
@@ -100,7 +101,19 @@ class Tahn:
         pass
 
     def apply_func(self, x):
-        return ( np.exp(x) - np.exp(-x) ) / ( np.exp(x) + np.exp(-x) )
+        flag = False
+        for i in range(len(x)):
+            if x[i][0] > 709 or x[i][0] < -709:
+                x = np.array([[Decimal(el[0])] for el in x], dtype=object)
+                flag = True
+                break
+
+        term =  ( np.exp(x) - np.exp(-x) ) / ( np.exp(x) + np.exp(-x) )
+
+        if flag:
+            term = np.asarray(term, dtype=float)
+
+        return term
 
     def apply_derived(self, x):
         # Derivation of Hyperbolic Tangent

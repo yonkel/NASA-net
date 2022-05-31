@@ -12,9 +12,9 @@ tahn = Tahn()
 sigmoid = SigmoidNp()
 
 
-def convergencia_spirals( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, wanted_MSE , spiral_nodes, show ):
+def convergence_general( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, wanted_MSE , data, show ):
     # data_train, data_test, labels_train, labels_test
-    inputs, test_inputs, labels, test_labels = spirals(spiral_nodes)
+    inputs, test_inputs, labels, test_labels = data
 
     threshold = 0.5
     lower_label = 0
@@ -33,18 +33,18 @@ def convergencia_spirals( architecture, net_type, act_func, learning_rate, max_e
     epoch_sum = 0
     p = len(inputs[0])
     # print(inputs[0])
-    MSEs = []
+    MSE = 0
 
     for n in range(repetitions):
         network = net_type(architecture, act_func, learning_rate)
         indexer = list(range(len(inputs)))
         epoch = 0
 
-        MSE = []
+
         mse = 999
         while mse > wanted_MSE and epoch < max_epoch:
             random.shuffle(indexer)
-            dobre = 0
+            properly_determined = 0
 
             for i in indexer:
                 intput = np.reshape(inputs[i], (2,1))
@@ -52,15 +52,14 @@ def convergencia_spirals( architecture, net_type, act_func, learning_rate, max_e
                 network.learning(intput, act_hidden, act_output, labels[i])
 
                 if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][0] == lower_label:
-                    dobre += 1
+                    properly_determined += 1
 
             epoch += 1
 
-            if epoch % 50 == 0:
+            if epoch % 20 == 0:
                 mse = network.MSE(test_inputs, test_labels)
-                MSE.append(mse)
 
-                print(f" Network {n}, epoch {epoch}, MSE {mse}, dobre {dobre} = {(dobre / len(inputs) * 100 )}%")
+                print(f" Network {n}, epoch {epoch}, MSE {mse}, properly determined {properly_determined} = {(properly_determined / len(inputs) * 100 )}%")
 
 
 
@@ -72,7 +71,7 @@ def convergencia_spirals( architecture, net_type, act_func, learning_rate, max_e
             nets_successful += 1
         epoch_sum += epoch
 
-        MSEs.append(MSE)
+        MSE += mse
 
     if show:
         print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
@@ -81,17 +80,18 @@ def convergencia_spirals( architecture, net_type, act_func, learning_rate, max_e
 
     end_time = time.time()
 
-    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time)}
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse": MSE/repetitions}
 
 if __name__ == '__main__':
     spiral_nodes = 1000
-    architecture = [2, 15, 1]
+    architecture = [2, 80, 1]
     learning_rate = 0.9
-    max_epoch = 3000
+    max_epoch = 5000
     repetitions = 10
     net_type = ExpNet
     act_fun = [tahn, tahn]
     wanted_MSE = 0.1
+    data = spirals(500)
 
-    x = convergencia_spirals( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, wanted_MSE , spiral_nodes , True )
+    x = convergence_general( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, wanted_MSE , data , True )
     print(x)

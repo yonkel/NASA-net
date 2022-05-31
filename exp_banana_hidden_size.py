@@ -1,31 +1,29 @@
 import time
 from expnet_numpy import ExpNet
-from perceptron_numpy import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
 from convergence_twospirals import convergence_general
 from statistics import mean, stdev
 from util import save_results
-from generator import spirals, spiralsMinus
-
+from generator import banana
 
 exp = Exp()
 tahn = Tahn()
 sigmoid = SigmoidNp()
 
 
-expname = 'spirals_hidden'
+expname = 'banana_hidden'
 learning_rate = 0.9
 max_epoch = 5000
 repetitions = 5
 
-hidden_size = [6, 9, 15, 20, 25, 30]
+hidden_size = [ 15, 20, 25, 30]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_expnet_mses = []
 
 exp_start = time.time()
 wanted_MSE = 0.05
-spirals_data = spirals(500)
+banana_data = banana()
 
 
 
@@ -34,7 +32,7 @@ for h in hidden_size:
     print("Testing hidden size: {}".format(h))
     architecture = [2, h, 1]
     results_expnet = convergence_general( architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
-                                           wanted_MSE , spirals_data , False )
+                                           wanted_MSE , banana_data , False )
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_expnet["nets"],
         repetitions,
@@ -55,4 +53,3 @@ print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round
 
 
 save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
-

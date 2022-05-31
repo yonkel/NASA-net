@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -57,6 +59,7 @@ def spirals(points, test_batch_size=0.2):
 
 def spiralsMinus(points, test_batch_size=0.2):
     x, y = twospirals_raw(points)
+
     data_train, data_test, labels_train, labels_test = train_test_split(x, y, test_size=test_batch_size)
 
     labels_train = np.where(labels_train == 0, -1, labels_train)
@@ -69,9 +72,23 @@ def spiralsMinus(points, test_batch_size=0.2):
     return data_train, data_test, labels_train, labels_test
 
 
+def banana():
+    inputs, labels = [], []
+    with open("banana_dataset.arff") as file:
+        for riadok in file:
+            riadok = riadok.split(",")
+            inputs.append( [ float(item) for item in riadok[:2]]  )
+            if int(riadok[2]) == 2:
+                labels.append([-1])
+            else:
+                labels.append([1])
+
+    return  train_test_split(inputs, labels, test_size=0.2)
+    # data_train, data_test, labels_train, labels_test =
+    # return data_train + data_test , data_test, labels_train + labels_test , labels_test
 
 if __name__ == "__main__":
-
+    pass
     # x, y = twospirals(500)
     # plt.title('training set')
     # plt.plot(x[y == 0, 0], x[y == 0, 1], '.', label='class 1')
@@ -79,13 +96,13 @@ if __name__ == "__main__":
     # plt.legend()
     # plt.show()
 
-    data_train, data_test, labels_train, labels_test = spiralsMinus(50)
-
-    print(data_train)
-
-
-
-
+    # x, x_t, y, y_t = banana()
+    # for i in range(len(x)):
+    #     print(x[i], y[i])
+    # print(len(x))
+    # print(len(x_t))
+    # print(len(x_t)/len(x))
+    # 5300
     # print(inp)
     # print(lab)
 
