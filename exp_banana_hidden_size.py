@@ -12,11 +12,11 @@ sigmoid = SigmoidNp()
 
 
 expname = 'banana_hidden'
-learning_rate = 0.9
-max_epoch = 5000
-repetitions = 5
+learning_rate = 0.7
+max_epoch = 3000
+repetitions = 25
 
-hidden_size = [ 3, 5, 10, 15, 20, 25, 30]
+hidden_size = [ 3, 5, 10, 15, 20, 25, 27]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_expnet_mses = []
