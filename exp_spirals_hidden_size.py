@@ -54,5 +54,5 @@ print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 
-save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
+save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs, plot_expnet_mses)
 

@@ -16,13 +16,13 @@ learning_rate = 0.9
 max_epoch = 5000
 repetitions = 5
 
-hidden_size = [ 15, 20, 25, 30]
+hidden_size = [ 3, 5, 10, 15, 20, 25, 30]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_expnet_mses = []
 
 exp_start = time.time()
-wanted_MSE = 0.05
+wanted_MSE = 0.1
 banana_data = banana()
 
 
@@ -52,4 +52,4 @@ print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 
-save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
+save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs, plot_expnet_mses)
