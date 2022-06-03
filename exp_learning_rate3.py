@@ -20,7 +20,7 @@ if p == 2:
 inputs_minus, labels_minus = paritaMinus(p)
 inputs_binary, labels_binary = parita(p)
 hidden_size_mulnet = 15
-hidden_size_mlp = 50
+hidden_size_mlp = 65
 max_epoch = 10000
 repetitions = 100
 success_window = 10
