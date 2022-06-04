@@ -34,8 +34,8 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
         properly_determined = 0
 
-        MSEs = []
-        PPDs = []
+        MSE_repetition = []
+        PPD_repetition = []
 
         while epoch < max_epoch :
             random.shuffle(indexer)
@@ -55,8 +55,8 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
             if epoch % 250 == 0:
                 print(f" Network {n}, epoch {epoch}, MSE {MSE}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
 
-            MSEs.append(MSE)
-            PPDs.append(properly_determined)
+            MSE_repetition.append(MSE)
+            PPD_repetition.append(properly_determined)
 
 
         if show:
@@ -66,8 +66,8 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
         epoch_sum += epoch
 
-        MSE_all.append(MSEs)
-        properly_determined_all.append(PPDs)
+        MSE_all.append(MSE_repetition)
+        properly_determined_all.append(PPD_repetition)
 
     if show:
         print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
