@@ -47,8 +47,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
             epoch += 1
             mse, properly_determined = network.MSE(test_inputs, test_labels)
 
-
-            if epoch % 500 == 0:
+            if epoch % 10 == 0:
                 mse, properly_determined = network.MSE(test_inputs, test_labels)
                 print(f" Network {n}, epoch {epoch}, MSE {mse}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
 
@@ -69,7 +68,8 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
     if show:
         print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
         plt.plot(list(range(repetitions)),epochs_to_success)
-        plt.show()
+        # plt.show()
+        plt.savefig("spirals_exp".time.time().".pdf", format="pdf")
 
     end_time = time.time()
 

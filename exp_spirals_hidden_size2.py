@@ -14,11 +14,11 @@ sigmoid = SigmoidNp()
 
 
 expname = 'spirals_hidden'
-learning_rate = 0.9
-max_epoch = 5000
-repetitions = 50
+learning_rate = 0.1
+max_epoch = 10000
+repetitions = 5
 
-hidden_size = [25, 30]
+hidden_size = [15]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_expnet_mses = []
