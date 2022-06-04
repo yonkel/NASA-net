@@ -50,14 +50,30 @@ class ExpNet:
         return result
 
     def MSE(self, inputs, labels):
-        SSE = 0
+        threshold = 0.5
+        lower_label = 0
+        for item in labels:
+            if item[0] == -1:
+                threshold = 0
+                lower_label = -1
+                break
+            if item[0] == 0:
+                break
 
+
+        SSE = 0
+        properly_determined = 0
         for i in range(len(labels)):
             intput = np.reshape(inputs[i], (2, 1))
             act_hidden, act_output = self.activation(intput)
             SSE += ( labels[i][0] - act_output[0] )**2
 
-        return SSE / len(labels)
+            if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][0] == lower_label:
+                properly_determined += 1
+
+
+
+        return ( SSE / len(labels) , properly_determined )
 
     def activation(self, act_input):
 

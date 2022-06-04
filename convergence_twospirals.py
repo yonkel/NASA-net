@@ -16,17 +16,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
     # data_train, data_test, labels_train, labels_test
     inputs, test_inputs, labels, test_labels = data
 
-    threshold = 0.5
-    lower_label = 0
-    for item in labels:
-        if item[0] == -1:
-            threshold = 0
-            lower_label = -1
-            break
-        if item[0] == 0:
-            break
-
-
+    properly_determined_all = []
     start_time = time.time()
     nets_successful = 0
     epochs_to_success = []
@@ -43,7 +33,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         properly_determined = 0
 
         mse = 999
-        while mse > wanted_MSE and epoch < max_epoch and properly_determined / len(inputs) < 0.95 :
+        while epoch < max_epoch :
             random.shuffle(indexer)
             properly_determined = 0
 
@@ -52,16 +42,13 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
                 act_hidden, act_output = network.activation(intput)
                 network.learning(intput, act_hidden, act_output, labels[i])
 
-                if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][0] == lower_label:
-                    properly_determined += 1
+
 
             epoch += 1
 
-            if epoch % 20 == 0:
-                mse = network.MSE(test_inputs, test_labels)
-
 
             if epoch % 500 == 0:
+                mse, properly_determined = network.MSE(test_inputs, test_labels)
                 print(f" Network {n}, epoch {epoch}, MSE {mse}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
 
 
@@ -76,6 +63,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         epoch_sum += epoch
 
         MSE += mse
+        properly_determined_all.append(properly_determined)
 
     if show:
         print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
@@ -84,7 +72,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
     end_time = time.time()
 
-    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse": MSE/repetitions}
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse": MSE/repetitions, "properly_determined" : properly_determined_all }
 
 if __name__ == '__main__':
     spiral_nodes = 1000
