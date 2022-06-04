@@ -18,7 +18,7 @@ learning_rate = 0.9
 max_epoch = 5000
 repetitions = 50
 
-hidden_size = [6, 9]
+hidden_size = [15, 20]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_expnet_mses = []
