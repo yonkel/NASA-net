@@ -45,7 +45,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
 
             epoch += 1
-
+            mse, properly_determined = network.MSE(test_inputs, test_labels)
 
             if epoch % 500 == 0:
                 mse, properly_determined = network.MSE(test_inputs, test_labels)
