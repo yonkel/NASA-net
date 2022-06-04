@@ -1,12 +1,16 @@
 import json
-import sys
+import sys, os
 from decimal import *
 import numpy as np
 import scipy.special as sc
 from net_util import Tahn
 
 
+
 def save_results( net_name, exp_name, nets, epc, mse=None):
+    if not os.path.exists("results"):
+        os.makedirs("results")
+
     with open(f'results/{net_name}_{exp_name}_nets.txt', 'a') as f:
         f.write('x y\n')
         f.writelines(nets)
