@@ -69,6 +69,9 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         MSE_all.append(MSE_repetition)
         properly_determined_all.append(PPD_repetition)
 
+        if MSE_repetition[-1] <= wanted_MSE:
+            nets_successful += 1
+
     if show:
         print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
         plt.plot(list(range(repetitions)),epochs_to_success)
