@@ -1,8 +1,10 @@
 import json
 import sys
-
+import os
 
 def save_results( net_name, exp_name, nets, epc):
+    if not os.path.exists("results"):
+        os.makedirs("results")
     with open(f'results/{net_name}_{exp_name}_nets.txt', 'a') as f:
         f.write('x y\n')
         f.writelines(nets)
