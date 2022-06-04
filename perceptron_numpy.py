@@ -17,7 +17,9 @@ class Perceptron:
         self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[1],self.arch[0]+1))
         self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]+1))
 
-    def MSE(self, inputs, labels):
+    def properly_determined(self, inputs, labels):
+        properly_determined = 0
+
         threshold = 0.5
         lower_label = 0
         for item in labels:
@@ -28,18 +30,18 @@ class Perceptron:
             if item[0] == 0:
                 break
 
-        SSE = 0
-        properly_determined = 0
         for i in range(len(labels)):
             intput = np.reshape(inputs[i], (2, 1))
             act_hidden, act_output = self.activation(intput)
-            SSE += (labels[i][0] - act_output[0]) ** 2
 
             if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][
                 0] == lower_label:
                 properly_determined += 1
 
-        return (SSE / len(labels), properly_determined)
+        return properly_determined
+
+
+
 
     def activation(self, act_input):
         biased_input = np.vstack([act_input, np.ones(len(act_input[0]))])
