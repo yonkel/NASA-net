@@ -22,6 +22,7 @@ hidden_size = [6, 9]
 plot_expnet_nets = []
 plot_expnet_epcs = []
 plot_expnet_mses = []
+plot_expnet_dets = []
 
 exp_start = time.time()
 wanted_MSE = 0.1
@@ -45,6 +46,7 @@ for h in hidden_size:
     plot_expnet_nets.append("{} {}\n".format(h, results_expnet["nets"]))
     plot_expnet_epcs.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
     plot_expnet_mses.append("{} {} \n".format(h, results_expnet["mse"]))
+    plot_expnet_dets.append("{} {} \n".format(h, results_expnet["properly_determined"]))
 
 exp_end = time.time()
 runtime = exp_end - exp_start
@@ -54,5 +56,5 @@ print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 
-save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs, plot_expnet_mses)
+save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs, plot_expnet_mses, plot_expnet_dets)
 
