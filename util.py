@@ -4,9 +4,12 @@ from decimal import *
 import numpy as np
 import scipy.special as sc
 from net_util import Tahn
+import os
 
 
 def save_results( net_name, exp_name, nets, epc, mse=None):
+    if not os.path.exists("results"):
+        os.makedirs("results")
     with open(f'results/{net_name}_{exp_name}_nets.txt', 'a') as f:
         f.write('x y\n')
         f.writelines(nets)
@@ -81,45 +84,6 @@ def load_json_parameters():
 
 if __name__ == '__main__':
     pass
-
-    tahn = Tahn()
-
-    x = np.array([
-                 [  72.64023382],
-                 [-658.37294647],
-                 [  65.90698254],
-                 [ -58.11132943],
-                 [   3.29965272],
-                 [-713.01799043],
-                 [ -79.22565105],
-                 [ -37.80401742],
-                 ])
-
-    # y = []
-    # for item in x:
-    #     y.append(np.asarray(item, dtype = np.longdouble))
-    #
-    # y = np.asarray(y, dtype = np.longdouble )
-    #
-    # print(type(y[0][0]))
-    #
-    # np.exp(-y)
-
-
-
-    # x = np.asarray([[Decimal(el[0]), Decimal(el[1])] for el in x], dtype=object)
-
-    print(tahn.apply_func(x))
-    print()
-
-    for i in range(len(x)):
-        if x[i][0] > 709 or x[i][0] < -709:
-            x = np.asarray([[Decimal(el[0])] for el in x], dtype=object)
-            break
-    nieco = ( np.exp(x) - np.exp(-x) ) / ( np.exp(x) + np.exp(-x) )
-    pole = np.asarray(nieco, dtype=float)
-
-    print(pole)
 
 
 
