@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from expnet_numpy import ExpNet
 from net_util import Exp, Tahn, SigmoidNp
-from generator import spirals, spiralsMinus
+from generator import spirals, spiralsMinus, spiralsMinusTransformed
 from perceptron_numpy import Perceptron
 
 exp = Exp()
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     net_type = ExpNet
     act_fun = [tahn, tahn]
     wanted_MSE = 0.1
-    data = spirals(500)
+    data = spiralsMinusTransformed(500)
 
     x = convergence_general( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, wanted_MSE , data , True )
     print(x)

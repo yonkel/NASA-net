@@ -72,6 +72,25 @@ def spiralsMinus(points, test_batch_size=0.2):
     return data_train, data_test, labels_train, labels_test
 
 
+
+def spiralsMinusTransformed(points, test_batch_size=0.2):
+    x, y = twospirals_raw(points)
+
+    m = np.max(x)
+    X = x / m
+
+    data_train, data_test, labels_train, labels_test = train_test_split(X, y, test_size=test_batch_size)
+
+    labels_train = np.where(labels_train == 0, -1, labels_train)
+    labels_train = np.reshape(labels_train, (len(labels_train), 1))
+
+    labels_test = np.where(labels_test == 0, -1, labels_test)
+    labels_test = np.reshape(labels_test, (len(labels_test), 1))
+
+
+    return data_train, data_test, labels_train, labels_test
+
+
 def banana():
     inputs, labels = [], []
     with open("banana_dataset.arff") as file:
@@ -89,12 +108,14 @@ def banana():
 
 if __name__ == "__main__":
     pass
-    # x, y = twospirals(500)
+    x, y, z,c = spiralsMinusTransformed(10)
     # plt.title('training set')
     # plt.plot(x[y == 0, 0], x[y == 0, 1], '.', label='class 1')
     # plt.plot(x[y == 1, 0], x[y == 1, 1], '.', label='class 2')
     # plt.legend()
     # plt.show()
+
+    print(x)
 
     # x, x_t, y, y_t = banana()
     # for i in range(len(x)):
