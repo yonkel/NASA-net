@@ -1,7 +1,7 @@
 import time
 from expnet_numpy import ExpNet
 from net_util import Exp, Tahn, SigmoidNp
-from convergence_twospirals import convergence_general
+from convergence_general import convergence_general
 from statistics import mean, stdev
 from util import save_results
 from generator import banana
