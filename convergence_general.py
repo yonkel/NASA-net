@@ -87,7 +87,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
     ACC_stdev = []
     MSE_stdev = []
 
-    for i in range(len(ACC_mean[0])):
+    for i in range(len(ACC_all[0])):
         epoch_ACC = [el[0] for el in ACC_all]
         epoch_MSE = [el[0] for el in MSE_all]
 
