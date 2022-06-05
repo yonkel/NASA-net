@@ -20,11 +20,11 @@ def save_results( net_name, exp_name, nets, epc, mse=None, dets = None):
     if mse != None:
         with open(f'results/{net_name}_{exp_name}_mses.txt', 'a') as f:
             f.write('x y\n')
-            f.writelines(epc)
+            f.writelines(mse)
     if dets != None:
         with open(f'results/{net_name}_{exp_name}_dets.txt', 'a') as f:
             f.write('x y\n')
-            f.writelines(epc)
+            f.writelines(dets)
 
 
 

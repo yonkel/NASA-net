@@ -5,7 +5,7 @@ from net_util import Exp, Tahn, SigmoidNp
 from convergence_general import convergence_general
 from statistics import mean, stdev
 from util import save_results
-from generator import spirals, spiralsMinus
+from generator import spirals, spiralsMinus, spiralsMinusTransformed
 
 
 exp = Exp()
@@ -26,7 +26,7 @@ plot_expnet_dets = []
 
 exp_start = time.time()
 wanted_MSE = 0.1
-spirals_data = spirals(500)
+spirals_data = spiralsMinusTransformed(500)
 
 
 

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from expnet_numpy import ExpNet
 from net_util import Exp, Tahn, SigmoidNp
-from generator import spirals, spiralsMinus
+from generator import spirals, spiralsMinus, spiralsMinusTransformed
 from perceptron_numpy import Perceptron
 
 exp = Exp()
@@ -16,14 +16,16 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
     # data_train, data_test, labels_train, labels_test
     inputs, test_inputs, labels, test_labels = data
 
-    properly_determined_all = []
+
     start_time = time.time()
     nets_successful = 0
     epochs_to_success = []
     epoch_sum = 0
     p = len(inputs[0])
     # print(inputs[0])
-    MSE = 0
+
+    properly_determined_all = []
+    MSE_all = []
 
     for n in range(repetitions):
         network = net_type(architecture, act_func, learning_rate)
@@ -32,38 +34,43 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
         properly_determined = 0
 
-        mse = 999
+        MSE_repetition = []
+        PPD_repetition = []
+
         while epoch < max_epoch :
             random.shuffle(indexer)
-            properly_determined = 0
-
+            SSE = 0
             for i in indexer:
                 intput = np.reshape(inputs[i], (2,1))
                 act_hidden, act_output = network.activation(intput)
                 network.learning(intput, act_hidden, act_output, labels[i])
+                SSE += (labels[i][0] - act_output[0]) ** 2
 
 
-
+            MSE = SSE / len(labels)
             epoch += 1
-            mse, properly_determined = network.MSE(test_inputs, test_labels)
+            properly_determined = network.properly_determined(test_inputs, test_labels)
+
 
             if epoch % 10 == 0:
-                mse, properly_determined = network.MSE(test_inputs, test_labels)
-                print(f" Network {n}, epoch {epoch}, MSE {mse}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
+                print(f" Network {n}, epoch {epoch}, MSE {MSE}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
 
-
+            MSE_repetition.append(MSE[0])
+            PPD_repetition.append(properly_determined)
 
 
         if show:
-            print("Convergence repetition {} sucess {}. Epochs to success: {}. MSE {} ".format(n,mse,epoch, mse ))
+            print("Convergence repetition {} Epochs to success: {}. MSE {}. ACC {} = {}% ".format(n,epoch, MSE[0], properly_determined, round((properly_determined / len(inputs) * 100), 2 ) ))
         epochs_to_success.append(epoch)
 
-        if mse <= wanted_MSE or properly_determined / len(inputs) >= 0.95:
-            nets_successful += 1
+
         epoch_sum += epoch
 
-        MSE += mse
-        properly_determined_all.append(properly_determined)
+        MSE_all.append(MSE_repetition)
+        properly_determined_all.append(PPD_repetition)
+
+        if MSE_repetition[-1] <= wanted_MSE:
+            nets_successful += 1
 
     if show:
         print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
@@ -73,7 +80,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
     end_time = time.time()
 
-    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse": MSE/repetitions, "properly_determined" : properly_determined_all }
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse": MSE_all, "properly_determined" : properly_determined_all }
 
 if __name__ == '__main__':
     spiral_nodes = 1000
@@ -84,7 +91,7 @@ if __name__ == '__main__':
     net_type = ExpNet
     act_fun = [tahn, tahn]
     wanted_MSE = 0.1
-    data = spirals(500)
+    data = spiralsMinusTransformed(500)
 
     x = convergence_general( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, wanted_MSE , data , True )
     print(x)
