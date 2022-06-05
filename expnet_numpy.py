@@ -49,6 +49,30 @@ class ExpNet:
                     result[i][j] *= self.quasiPow( B[k][j] ,sigmo.apply_func(A[i][k]) )
         return result
 
+    def properly_determined(self, inputs, labels):
+        properly_determined = 0
+
+        threshold = 0.5
+        lower_label = 0
+        for item in labels:
+            if item[0] == -1:
+                threshold = 0
+                lower_label = -1
+                break
+            if item[0] == 0:
+                break
+
+        for i in range(len(labels)):
+            intput = np.reshape(inputs[i], (2, 1))
+            act_hidden, act_output = self.activation(intput)
+
+            if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][
+                0] == lower_label:
+                properly_determined += 1
+
+        return properly_determined
+
+
 
     def activation(self, act_input):
 

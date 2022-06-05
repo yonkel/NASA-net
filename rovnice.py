@@ -4,7 +4,7 @@ import math
 import numpy as np
 import random
 import net_util
-
+from util import load_json_parameters
 # povedzme teoreticky ze mame iba jednu skrytu vrstvu
 # vahy W_hid, W_out
 # vstup nejaky vektor X
@@ -140,14 +140,18 @@ if __name__ == '__main__':
     # ]
 
 
-    a = np.random.rand(3,3)
-    b = np.random.rand(3,3)
+    # a = np.random.rand(3,3)
+    # b = np.random.rand(3,3)
 
     # print(a @ b.T)
     # print()
     # print( (b @ a.T).T )
 
-    print(mquasimul_left(a,b))
+    # print(mquasimul_left(a,b))
+
+    x = load_json_parameters()
+    for i in x:
+        print(i)
 
 
 
