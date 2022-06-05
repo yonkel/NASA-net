@@ -8,7 +8,7 @@ import os
 
 
 
-def save_results( net_name, exp_name, nets, epc, mse=None):
+def save_results( net_name, exp_name, nets, epc, mse=None, dets = None):
     if not os.path.exists("results"):
         os.makedirs("results")
     with open(f'results/{net_name}_{exp_name}_nets.txt', 'a') as f:
@@ -21,6 +21,11 @@ def save_results( net_name, exp_name, nets, epc, mse=None):
         with open(f'results/{net_name}_{exp_name}_mses.txt', 'a') as f:
             f.write('x y\n')
             f.writelines(epc)
+    if dets != None:
+        with open(f'results/{net_name}_{exp_name}_dets.txt', 'a') as f:
+            f.write('x y\n')
+            f.writelines(epc)
+
 
 
 def generate_parameters( experiment_name ):
