@@ -19,10 +19,12 @@ def save_results( net_name, exp_name, nets, epc):
         f.writelines(epc)
 
 
+def check_dir(name):
+    if not os.path.exists(name):
+        os.makedirs(name)
 
 def save_MSE_ACC( net_name, exp_name, value,  MSE_mean, MSE_stdev, ACC_mean, ACC_stdev, epochs):
-    if not os.path.exists("results"):
-        os.makedirs("results")
+    check_dir("results")
 
     with open(f'results/{net_name}_{exp_name}_{value}_MSE.txt', 'a') as f:
         f.write('x y err\n')

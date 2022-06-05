@@ -15,27 +15,30 @@ sigmoid = SigmoidNp()
 
 expname = 'spirals_hidden'
 learning_rate = 0.2
-max_epoch = 10000
-repetitions = 5
+max_epoch = 100
+repetitions = 2
 
 hidden_size = [10]
 plot_expnet_nets = []
 plot_expnet_epcs = []
-plot_expnet_mses = []
-plot_expnet_dets = []
 
 exp_start = time.time()
 wanted_MSE = 0.1
 spirals_data = spiralsMinusTransformed(500)
 
+save_params = {
+    "exp_name" : "spirals_hidden",
+    "net_name" : "mulnet",
+}
 
 
 
 for h in hidden_size:
     print("Testing hidden size: {}".format(h))
     architecture = [2, h, 1]
+    save_params["value"] = h
     results_expnet = convergence_general( architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
-                                           wanted_MSE , spirals_data , False )
+                                           wanted_MSE , spirals_data , False, save_params)
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_expnet["nets"],
         repetitions,
@@ -55,5 +58,5 @@ print(s)
 print('\nExperiment finished in {:d}:{:02d}:{:02d}'.format(int(h), int(m), round(s)))
 
 
-save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs, plot_expnet_mses, plot_expnet_dets)
+save_results("mulnet", expname, plot_expnet_nets, plot_expnet_epcs)
 
