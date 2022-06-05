@@ -8,7 +8,7 @@ import os
 
 
 
-def save_results( net_name, exp_name, nets, epc, mse=None, dets = None):
+def save_results( net_name, exp_name, nets, epc):
     if not os.path.exists("results"):
         os.makedirs("results")
     with open(f'results/{net_name}_{exp_name}_nets.txt', 'a') as f:
@@ -17,14 +17,23 @@ def save_results( net_name, exp_name, nets, epc, mse=None, dets = None):
     with open(f'results/{net_name}_{exp_name}_epcs.txt', 'a') as f:
         f.write('x y err\n')
         f.writelines(epc)
-    if mse != None:
-        with open(f'results/{net_name}_{exp_name}_mses.txt', 'a') as f:
-            f.write('x y\n')
-            f.writelines(mse)
-    if dets != None:
-        with open(f'results/{net_name}_{exp_name}_dets.txt', 'a') as f:
-            f.write('x y\n')
-            f.writelines(dets)
+
+
+
+def save_MSE_ACC( net_name, exp_name, value,  MSE_mean, MSE_stdev, ACC_mean, ACC_stdev, epochs):
+    if not os.path.exists("results"):
+        os.makedirs("results")
+
+    with open(f'results/{net_name}_{exp_name}_{value}_MSE.txt', 'a') as f:
+        f.write('x y err\n')
+        for i in range(len(epochs)):
+            f.write(f"{epochs[i]} {MSE_mean[i]} {MSE_stdev[i]}")
+
+    with open(f'results/{net_name}_{exp_name}_{value}_ACC.txt', 'a') as f:
+        f.write('x y err\n')
+        for i in range(len(epochs)):
+            f.write(f"{epochs[i]} {ACC_mean[i]} {ACC_stdev[i]}")
+
 
 
 

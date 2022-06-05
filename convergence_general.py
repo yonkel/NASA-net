@@ -7,6 +7,7 @@ from net_util import Exp, Tahn, SigmoidNp
 from generator import spirals, spiralsMinus, spiralsMinusTransformed
 from perceptron_numpy import Perceptron
 from statistics import mean, stdev
+from util import save_MSE_ACC
 
 exp = Exp()
 tahn = Tahn()
@@ -37,6 +38,8 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
         MSE_repetition = []
         ACC_repetition = []
+
+
 
         while epoch < max_epoch :
             random.shuffle(indexer)
@@ -97,7 +100,10 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         ACC_stdev.append(stdev(epoch_ACC))
         MSE_stdev.append(stdev(epoch_MSE))
 
-    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse_mean": MSE_mean, "acc_mean" : ACC_mean }
+    # all_epochs = range(0, max_epoch, max_epoch // len(ACC_all[0]))
+
+
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse_mean": MSE_mean, "acc_mean" : ACC_mean , "mse_stdev": MSE_stdev, "acc_stdev" : ACC_stdev }
 
 if __name__ == '__main__':
     spiral_nodes = 1000
