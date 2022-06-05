@@ -106,16 +106,40 @@ def banana():
     # data_train, data_test, labels_train, labels_test =
     # return data_train + data_test , data_test, labels_train + labels_test , labels_test
 
+def banana_Transformed():
+    inputs, labels = [], []
+    with open("banana_dataset.arff") as file:
+        for riadok in file:
+            riadok = riadok.split(",")
+            inputs.append( [ float(item) for item in riadok[:2]]  )
+            if int(riadok[2]) == 2:
+                labels.append([-1])
+            else:
+                labels.append([1])
+
+
+
+    m = np.max(inputs)
+    inputs_rescalled = inputs / m
+
+    # print(m)
+    # print(inputs[:20])
+    # print(inputs_rescalled[:20])
+
+    return  train_test_split(inputs_rescalled, labels, test_size=0.2)
+
+
+
 if __name__ == "__main__":
     pass
-    x, y, z,c = spiralsMinusTransformed(10)
+    x, y, z,c = banana_Transformed()
     # plt.title('training set')
     # plt.plot(x[y == 0, 0], x[y == 0, 1], '.', label='class 1')
     # plt.plot(x[y == 1, 0], x[y == 1, 1], '.', label='class 2')
     # plt.legend()
     # plt.show()
 
-    print(x)
+    print("done")
 
     # x, x_t, y, y_t = banana()
     # for i in range(len(x)):
