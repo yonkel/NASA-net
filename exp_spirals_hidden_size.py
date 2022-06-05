@@ -45,8 +45,8 @@ for h in hidden_size:
     ))
     plot_expnet_nets.append("{} {}\n".format(h, results_expnet["nets"]))
     plot_expnet_epcs.append("{} {} {}\n".format(h, mean(results_expnet["epochs"]), stdev(results_expnet["epochs"])))
-    plot_expnet_mses.append("{} {} \n".format(h, results_expnet["mse"]))
-    plot_expnet_dets.append("{} {} \n".format(h, results_expnet["properly_determined"]))
+    plot_expnet_mses.append("{} {} \n".format(h, results_expnet["mse_mean"]))
+    plot_expnet_dets.append("{} {} \n".format(h, results_expnet["acc_mean"]))
 
 exp_end = time.time()
 runtime = exp_end - exp_start

@@ -6,6 +6,7 @@ from expnet_numpy import ExpNet
 from net_util import Exp, Tahn, SigmoidNp
 from generator import spirals, spiralsMinus, spiralsMinusTransformed
 from perceptron_numpy import Perceptron
+from statistics import mean, stdev
 
 exp = Exp()
 tahn = Tahn()
@@ -24,7 +25,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
     p = len(inputs[0])
     # print(inputs[0])
 
-    properly_determined_all = []
+    ACC_all = []
     MSE_all = []
 
     for n in range(repetitions):
@@ -35,7 +36,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         properly_determined = 0
 
         MSE_repetition = []
-        PPD_repetition = []
+        ACC_repetition = []
 
         while epoch < max_epoch :
             random.shuffle(indexer)
@@ -53,10 +54,10 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
 
             if epoch % 10 == 0:
-                print(f" Network {n}, epoch {epoch}, MSE {MSE}, properly determined {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
+                print(f" Network {n}, epoch {epoch}, MSE {MSE}, ACC {properly_determined} = {round((properly_determined / len(inputs) * 100), 2 )}%")
 
             MSE_repetition.append(MSE[0])
-            PPD_repetition.append(properly_determined)
+            ACC_repetition.append(round((properly_determined / len(inputs) * 100), 2 ))
 
 
         if show:
@@ -67,7 +68,7 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         epoch_sum += epoch
 
         MSE_all.append(MSE_repetition)
-        properly_determined_all.append(PPD_repetition)
+        ACC_all.append(ACC_repetition)
 
         if MSE_repetition[-1] <= wanted_MSE:
             nets_successful += 1
@@ -80,7 +81,23 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
     end_time = time.time()
 
-    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse": MSE_all, "properly_determined" : properly_determined_all }
+    ACC_mean = []
+    MSE_mean = []
+
+    ACC_stdev = []
+    MSE_stdev = []
+
+    for i in range(len(ACC_mean[0])):
+        epoch_ACC = [el[0] for el in ACC_all]
+        epoch_MSE = [el[0] for el in MSE_all]
+
+        ACC_mean.append(mean(epoch_ACC))
+        MSE_mean.append(mean(epoch_MSE))
+
+        ACC_stdev.append(stdev(epoch_ACC))
+        MSE_stdev.append(stdev(epoch_MSE))
+
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time), "mse_mean": MSE_mean, "acc_mean" : ACC_mean }
 
 if __name__ == '__main__':
     spiral_nodes = 1000
