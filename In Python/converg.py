@@ -2,10 +2,10 @@ import random
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from expnet_numpy import ExpNet
+from NASA import ExpNet
 from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
-from perceptron_numpy import Perceptron
+from perceptron import Perceptron
 
 exp = Exp()
 tahn = Tahn()

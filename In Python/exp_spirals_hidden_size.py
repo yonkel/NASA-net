@@ -1,6 +1,6 @@
 import time
-from expnet_numpy import ExpNet
-from perceptron_numpy import Perceptron
+from NASA import ExpNet
+from perceptron import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
 from convergence_general import convergence_general
 from statistics import mean, stdev

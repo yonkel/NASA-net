@@ -1,5 +1,5 @@
 import time
-from expnet_numpy import ExpNet
+from NASA import ExpNet
 from net_util import Exp, Tahn
 from generator import paritaMinus
 from converg import convergencia
