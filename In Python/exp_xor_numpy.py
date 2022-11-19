@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from net_util import SigmoidNp, Exp, Tahn
 
 
@@ -20,7 +20,7 @@ sigmoid = SigmoidNp()
 exp = Exp()
 tahn = Tahn()
 
-network = ExpNet(architecture, [tahn,exp], learning_rate)
+network = NASA_one_layer(architecture, [tahn, exp], learning_rate)
 performance = []
 
 for epoch in range(max_epoch):

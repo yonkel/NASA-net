@@ -2,7 +2,7 @@ import random
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
 from perceptron import Perceptron
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     max_epoch = 3000
     repetitions = 10
     success_window = 10
-    net_type = ExpNet
+    net_type = NASA_one_layer
     act_fun = [tahn, tahn]
     # net_type = Perceptron
     # act_fun = [sigmoid, sigmoid]

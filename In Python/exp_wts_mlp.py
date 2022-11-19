@@ -1,5 +1,5 @@
 import time
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from perceptron import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita

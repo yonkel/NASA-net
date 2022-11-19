@@ -2,7 +2,7 @@ import random
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from net_util import Exp, Tahn, SigmoidNp
 from generator import spirals, spiralsMinus, spiralsMinusTransformed
 from perceptron import Perceptron
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     learning_rate = 0.9
     max_epoch = 5000
     repetitions = 10
-    net_type = ExpNet
+    net_type = NASA_one_layer
     act_fun = [tahn, tahn]
     wanted_MSE = 0.1
     data = spiralsMinusTransformed(500)

@@ -1,5 +1,5 @@
 import time
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from perceptron import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
@@ -51,7 +51,7 @@ exp_start = time.time()
 for lr in learning_rate:
     print("Testing learning rate: {}".format(lr))
     architecture = [p, hidden_size, 1]
-    results_expnet = convergencia(architecture, ExpNet, [tahn, exp], lr, max_epoch, repetitions,
+    results_expnet = convergencia(architecture, NASA_one_layer, [tahn, exp], lr, max_epoch, repetitions,
                                   success_window, inputs_minus, labels_minus, False)
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_expnet["nets"],

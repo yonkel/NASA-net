@@ -1,5 +1,5 @@
 import time
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from net_util import Exp, Tahn, SigmoidNp
 from convergence_general import convergence_general
 from statistics import mean, stdev
@@ -31,8 +31,8 @@ banana_data = banana()
 for h in hidden_size:
     print("Testing hidden size: {}".format(h))
     architecture = [2, h, 1]
-    results_expnet = convergence_general( architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
-                                           wanted_MSE , banana_data , False )
+    results_expnet = convergence_general(architecture, NASA_one_layer, [tahn, exp], learning_rate, max_epoch, repetitions,
+                                         wanted_MSE, banana_data, False)
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_expnet["nets"],
         repetitions,

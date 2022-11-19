@@ -118,3 +118,9 @@ class Tahn:
     def apply_derived(self, x):
         # Derivation of Hyperbolic Tangent
         return ( 1 + x ) * ( 1 - x ) # 1^2 - tahn^2(x)
+
+
+class Quasi:
+
+    def __init__(self):
+        pass

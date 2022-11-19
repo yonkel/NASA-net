@@ -1,5 +1,5 @@
 import time
-from NASA import ExpNet
+from NASA_one_layer_only import NASA_one_layer
 from perceptron import Perceptron
 from net_util import Exp, Tahn, SigmoidNp
 from convergence_general import convergence_general
@@ -37,8 +37,8 @@ for h in hidden_size:
     print("Testing hidden size: {}".format(h))
     architecture = [2, h, 1]
     save_params["value"] = h
-    results_expnet = convergence_general( architecture, ExpNet, [tahn, exp], learning_rate, max_epoch, repetitions,
-                                           wanted_MSE , spirals_data , False, save_params)
+    results_expnet = convergence_general(architecture, NASA_one_layer, [tahn, exp], learning_rate, max_epoch, repetitions,
+                                         wanted_MSE, spirals_data, False, save_params)
     print("EXP nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s".format(
         results_expnet["nets"],
         repetitions,
