@@ -7,13 +7,13 @@ class NASA:
     def __init__(self, params):
 
         # read hyperparameters
-        self.layers = len(params["layers"]) # [ input dimension, h_1, ... , h_n, output dimension ]
+        self.layers = params["layers"] # [ input dimension, h_1, ... , h_n, output dimension ]
         self.activation_funcions = params["activation_funcions"]
         self.learning_rate = params["learning_rate"]
 
         # initiate Weights
         self.W = []
-        for i in range(self.layers - 1):
+        for i in range(len(self.layers) - 1):
             if type(self.activation_funcions) == Quasi:
                 self.W.append(np.random.normal(params["weight_mean"], params["weight_variance"],
                                                (params["layers"][i], params["layers"][i + 1])))
@@ -25,7 +25,7 @@ class NASA:
 
         h = [act_input]
 
-        for i in range(1, self.layers):
+        for i in range(1, len(self.layers)-1):
             if type(self.activation_funcions[i]) == Quasi:
                 h_i = self.activation_funcions[-1].apply_func(self.W[i - 1], h[i - 1])
             else:
