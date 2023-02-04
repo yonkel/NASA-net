@@ -5,12 +5,13 @@ from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
 from converg import convergencia
 from statistics import mean, stdev
-from util import save_results, log_time
+from util import save_results
 
 p = 2
-hidden_size = 2
+hidden_size = [6]
 max_epoch = 1000
 repetitions = 100
+
 sigmoid = SigmoidNp()
 learning_rate = 0.9
 expname = 'parity{}_hidden'.format(p)
@@ -36,5 +37,5 @@ for h in hidden_size:
     ))
     plot_mlp_nets.append("{} {}\n".format(h, results_mlp["nets"]))
     plot_mlp_epcs.append(("{} {} {}\n".format(h, mean(results_mlp["epochs"]), stdev(results_mlp["epochs"]))))
-log_time(exp_start)
+time = time.time() - exp_start
 save_results("mlp", expname, plot_mlp_nets, plot_mlp_epcs)

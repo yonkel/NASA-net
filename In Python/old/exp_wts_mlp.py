@@ -5,13 +5,12 @@ from net_util import Exp, Tahn, SigmoidNp
 from generator import paritaMinus, parita
 from converg import convergencia
 from statistics import mean, stdev
-from util import save_results, log_time
+
 
 p = 2
-hidden_size = [2,4]
+hidden_size = 2
 max_epoch = 1000
 repetitions = 100
-
 sigmoid = SigmoidNp()
 learning_rate = 0.9
 expname = 'parity{}_hidden'.format(p)

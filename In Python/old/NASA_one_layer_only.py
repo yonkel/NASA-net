@@ -17,12 +17,11 @@ class NASA_one_layer:
         self.init_weight_mean = init_w_mean
         self.init_weight_variance = init_w_variance
 
-        self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[1],self.arch[0]+1))
-        self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]))
-        # self.weights_hidden_output = np.ones((self.arch[2], self.arch[1]))
+        self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,
+                                                     (self.arch[1], self.arch[0] + 1))
+        self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,
+                                                      (self.arch[2], self.arch[1]))
 
-        # print(self.weights_hidden_output.shape)
-        # input() #sedi (1,8)
         self.sigmoid = SigmoidNp()
 
     def msupermul_left(self, A, B):
@@ -36,7 +35,7 @@ class NASA_one_layer:
         return result
 
     def quasiPow(self, base, exp):
-        return 1 - exp * ( 1 - base )
+        return 1 - exp * (1 - base)
 
     def mquasimul_left(self, A, B):
         sigmo = SigmoidNp()
@@ -46,7 +45,7 @@ class NASA_one_layer:
         for i in range(rows):
             for j in range(columns):
                 for k in range(A.shape[1]):
-                    result[i][j] *= self.quasiPow( B[k][j] ,sigmo.apply_func(A[i][k]) )
+                    result[i][j] *= self.quasiPow(B[k][j], sigmo.apply_func(A[i][k]))
         return result
 
     def properly_determined(self, inputs, labels):
@@ -72,9 +71,9 @@ class NASA_one_layer:
 
         return properly_determined
 
-
-
     def activation(self, act_input):
+
+
 
         biased_input = np.vstack([act_input, np.ones(len(act_input[0]))])
         act_hidden = self.activation_funcions[0].apply_func(np.dot(self.weights_input_hidden, biased_input))
@@ -84,12 +83,18 @@ class NASA_one_layer:
         return act_hidden, act_output
 
     def learning(self, act_input, act_hidden, act_output, labels):
+
+        print("act_input", act_input)
+
         biased_act_input = np.vstack([act_input, np.ones(len(act_input[0]))])
+
         weight_change_output = self.weights_hidden_output.copy()
         error_hid = act_hidden.copy()
 
         error_out = (labels - act_output)
         delta_output = error_out * act_output
+        # delta_output = labels - act_output
+
 
         for j in range(self.arch[1]):
             tmp = 0
@@ -98,10 +103,13 @@ class NASA_one_layer:
 
                 common_term_j_k = self.quasiPow(act_hidden[j][0], logistic_degree)
 
+
+
                 # print("term",common_term_j_k)
                 # print("delta[k]",delta_output[k])
 
                 if common_term_j_k < 0.0000000001:
+                    print("som tu pre ",act_input)
                     # print("j=",j,",k=",k,",base=act_hidden[j][0]=",act_hidden[j][0],",degree=logistic(outputWeight)=",logistic_degree,",deltaOutput[k]=",delta_output[k],",quasiPow=",self.quasiPow(act_hidden[j][0], logistic_degree))
                     # print("error_out[k]=",error_out[k][0],",act_output[k][0]=",act_output[k][0])
                     # print("quasipow=(1-degree*(1-base)):(1-base)=",(1-act_hidden[j][0]),",degree*(1-base)=",(logistic_degree*(1-act_hidden[j][0])))
@@ -115,9 +123,12 @@ class NASA_one_layer:
                     common_term_j_k = delta_output[k] / common_term_j_k
 
                 if (math.isnan(common_term_j_k)):
-                    print("j=",j,",k=",k,",base=act_hidden[j][0]=",act_hidden[j][0],",degree=logistic(outputWeight)=",logistic_degree,",deltaOutput[k]=",delta_output[k],",quasiPow=",self.quasiPow(act_hidden[j][0], logistic_degree))
-                    print("error_out[k]=",error_out[k][0],",act_output[k][0]=",act_output[k][0])
-                    print("quasipow=(1-degree*(1-base)):(1-base)=",(1-act_hidden[j][0]),",degree*(1-base)=",(logistic_degree*(1-act_hidden[j][0])))
+                    print("j=", j, ",k=", k, ",base=act_hidden[j][0]=", act_hidden[j][0],
+                          ",degree=logistic(outputWeight)=", logistic_degree, ",deltaOutput[k]=", delta_output[k],
+                          ",quasiPow=", self.quasiPow(act_hidden[j][0], logistic_degree))
+                    print("error_out[k]=", error_out[k][0], ",act_output[k][0]=", act_output[k][0])
+                    print("quasipow=(1-degree*(1-base)):(1-base)=", (1 - act_hidden[j][0]), ",degree*(1-base)=",
+                          (logistic_degree * (1 - act_hidden[j][0])))
                     quit()
 
                 weight_change_output[k][j] = common_term_j_k * (act_hidden[j] - 1) * logistic_degree * (1 - logistic_degree)
@@ -127,18 +138,21 @@ class NASA_one_layer:
             error_hid[j] = tmp
 
 
+
         # error_hid = np.dot(self.weights_hidden_output[:, :self.arch[1]].transpose(), delta_output) / act_hidden
         delta_hidden = error_hid * self.activation_funcions[0].apply_derived(act_hidden)
-
 
         # weight_change_output = np.dot(act_hidden, delta_output.transpose()).transpose()
         weight_change_hidden = np.dot(biased_act_input, delta_hidden.transpose()).transpose() # a @ b.T == (b @ a.T).T
 
+        # print("weight_change_output", weight_change_output)
+        # print()
+        # print("weight_change_hidden", weight_change_hidden)
+        # print("\nnew")
+
 
         self.weights_hidden_output += (self.learning_rate) * weight_change_output
         self.weights_input_hidden += (self.learning_rate) * weight_change_hidden
-
-
 
         # #############################################
         # print("labels\n", labels, "\n")
@@ -152,27 +166,29 @@ class NASA_one_layer:
         # print("zmena\n", weight_change_hidden, "\n")
         # #############################################
 
-
         return True
 
-from net_util import Exp, Tahn
-exp = Exp()
-tahn = Tahn()
-n = NASA_one_layer([2, 3, 1], [tahn, exp], 0.5)
 
-act_input = np.reshape( np.array([0,0]), (2,1))
+if __name__ == "__main__":
+    from net_util import Exp, Tahn
 
-act_output = np.reshape( np.array([-0.45281027404449]), (1,1))
+    exp = Exp()
+    tahn = Tahn()
+    n = NASA_one_layer([2, 3, 1], [tahn, exp], 0.5)
 
-act_hidden = np.reshape( np.array([
-0.9906782365800988 ,
--0.7314259368233821 ,
-0.6249039835614231 ,
-]), (3,1))
+    act_input = np.reshape(np.array([0, 0]), (2, 1))
 
-label = np.reshape( np.array([0]), (1,1))
+    act_output = np.reshape(np.array([-0.45281027404449]), (1, 1))
 
-n.learning( act_input, act_hidden, act_output, label)
+    act_hidden = np.reshape(np.array([
+        0.9906782365800988,
+        -0.7314259368233821,
+        0.6249039835614231,
+    ]), (3, 1))
+
+    label = np.reshape(np.array([0]), (1, 1))
+
+    n.learning(act_input, act_hidden, act_output, label)
 
 ''' learning
 
@@ -216,12 +232,6 @@ result.deltaWeight[i-2] == zmena
 
 '''
 
-
-
-
-
-
-
 ''' propagation 
 weights[layer]
 2.726795083003882 0.7615135982311503 0.988217528686029 
@@ -261,5 +271,3 @@ print("y\n", y, "\n")
 
 
 '''
-
-

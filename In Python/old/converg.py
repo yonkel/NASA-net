@@ -13,6 +13,7 @@ sigmoid = SigmoidNp()
 
 
 def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, success_window, inputs, labels, show ):
+
     threshold = 0.5
     label = 0
     for item in labels:
@@ -35,7 +36,7 @@ def convergencia( architecture, net_type, act_func, learning_rate, max_epoch, re
         epoch = 0
         succ_max = 0
         while success_global < success_window and epoch < max_epoch:
-            random.shuffle(indexer)
+            # random.shuffle(indexer)
             success_epoch = 0
             for i in indexer:
                 intput = np.reshape(inputs[i], (p,1))
@@ -85,21 +86,5 @@ if __name__ == "__main__":
 
     x = convergencia( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, success_window, inputs, labels, True)
     print(x)
-
-
-    # threshold = 0.5
-    # label = 0
-    #
-    # for item in labels:
-    #     if item[0] == -1:
-    #         threshold = -0.5
-    #         label = -1
-    #         break
-    #     if item[0] == 0:
-    #         break
-    #     print("item", item)
-    #
-    # print(threshold, label)
-    # input("cakam")
 
 

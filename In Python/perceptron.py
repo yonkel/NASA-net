@@ -14,37 +14,28 @@ class Perceptron:
         self.init_weight_mean = init_w_mean
         self.init_weight_variance = init_w_variance
         # make weights: notice +1 for bias, we have to keep in mind to add the bias to all computations
-        self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[1],self.arch[0]+1))
-        self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,(self.arch[2],self.arch[1]+1))
+        self.weights_input_hidden = np.random.normal(self.init_weight_mean, self.init_weight_variance,
+                                                     (self.arch[1], self.arch[0] + 1))
+        self.weights_hidden_output = np.random.normal(self.init_weight_mean, self.init_weight_variance,
+                                                      (self.arch[2], self.arch[1] + 1))
 
-    def properly_determined(self, inputs, labels):
-        properly_determined = 0
+        self.weights_input_hidden = np.array([[-0.15968122, 0.69476766, -0.64096558],
+                                              [1.40581777, -0.6320973, 0.82332406],
+                                              [1.24587293, -2.02262976, 0.71242802],
+                                              [1.51597793, 0.72899789, 1.08629178],
+                                              [-0.55620016, -1.58849003, -0.04311313],
+                                              [1.53407221, 0.0981844, -0.65777507]])
 
-        threshold = 0.5
-        lower_label = 0
-        for item in labels:
-            if item[0] == -1:
-                threshold = 0
-                lower_label = -1
-                break
-            if item[0] == 0:
-                break
-
-        for i in range(len(labels)):
-            intput = np.reshape(inputs[i], (2, 1))
-            act_hidden, act_output = self.activation(intput)
-
-            if act_output[0][0] >= threshold and labels[i][0] == 1 or act_output[0][0] < threshold and labels[i][
-                0] == lower_label:
-                properly_determined += 1
-
-        return properly_determined
+        self.weights_hidden_output = np.array(
+            [[-1.90690636, 2.32660823, -1.96985584, 1.59555433, 0.88560405, -0.46287536,
+              -1.67162011]])
 
 
 
 
     def activation(self, act_input):
         biased_input = np.vstack([act_input, np.ones(len(act_input[0]))])
+
         act_hidden = self.activation_funcions[0].apply_func(
             np.dot(self.weights_input_hidden, biased_input)
         )
@@ -52,8 +43,8 @@ class Perceptron:
         act_output = self.activation_funcions[1].apply_func(
             np.dot(self.weights_hidden_output, biased_act_hidden)
         )
-        return act_hidden, act_output
 
+        return act_hidden, act_output
 
     # BP from ICI slides:
     # w_{jk} += \alpha \delta_{k}h_{j}
@@ -66,6 +57,7 @@ class Perceptron:
         biased_act_hidden = np.vstack([act_hidden, np.ones(len(act_hidden[0]))])
 
         delta_output = (labels - act_output) * self.activation_funcions[1].apply_derived(act_output)
+
         delta_hidden = np.dot(self.weights_hidden_output[:, :self.arch[1]].transpose(), delta_output) * \
                        self.activation_funcions[0].apply_derived(act_hidden)
 
@@ -74,6 +66,6 @@ class Perceptron:
 
         self.weights_hidden_output += (self.learning_rate) * weight_change_output
         self.weights_input_hidden += (self.learning_rate) * weight_change_hidden
+
+
         return True
-
-

@@ -8,6 +8,7 @@ from generator import spirals, spiralsMinus, spiralsMinusTransformed
 from perceptron import Perceptron
 from statistics import mean, stdev
 from util import check_dir
+from NASA import NASA
 
 exp = Exp()
 tahn = Tahn()
@@ -137,8 +138,8 @@ if __name__ == '__main__':
     learning_rate = 0.9
     max_epoch = 5000
     repetitions = 10
-    net_type = NASA_one_layer
-    act_fun = [tahn, tahn]
+    net_type = NASA
+    act_fun = [tahn, tahn, tahn]
     wanted_MSE = 0.1
     data = spiralsMinusTransformed(500)
 

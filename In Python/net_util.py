@@ -59,9 +59,10 @@ class OutputProcessor:
         pass
 
     def make_one_hot(input_array):
-        output_array = np.zeros((input_array.size, input_array.max()+1))
-        output_array[np.arange(input_array.size),input_array] = 1
+        output_array = np.zeros((input_array.size, input_array.max() + 1))
+        output_array[np.arange(input_array.size), input_array] = 1
         return output_array
+
 
 class Exp:
     def __init__(self):
@@ -73,28 +74,27 @@ class Exp:
 
         # result = np.exp(A @ np.log(B))
 
-
     def apply_derived(self, output):
-        return 1 - output*output
+        return 1 - output * output
+
 
 class Exp2:
     def __init__(self):
         pass
 
-
-
     def apply_derived(self, output):
         if output >= 0:
-            if output > 1 :
+            if output > 1:
                 return np.NAN
-            return - np.log(1-output/2)
+            return - np.log(1 - output / 2)
 
         elif output <= -0:
             if output < -1:
                 return np.NAN
-            return  np.log(1+output/2)
+            return np.log(1 + output / 2)
 
-        return output #NaN
+        return output  # NaN
+
 
 class Tahn:
     def __init__(self):
@@ -108,7 +108,7 @@ class Tahn:
                 flag = True
                 break
 
-        term =  ( np.exp(x) - np.exp(-x) ) / ( np.exp(x) + np.exp(-x) )
+        term = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
 
         if flag:
             term = np.asarray(term, dtype=float)
@@ -117,10 +117,25 @@ class Tahn:
 
     def apply_derived(self, x):
         # Derivation of Hyperbolic Tangent
-        return ( 1 + x ) * ( 1 - x ) # 1^2 - tahn^2(x)
+        return (1 + x) * (1 - x)  # 1^2 - tahn^2(x)
 
 
 class Quasi:
 
     def __init__(self):
-        pass
+        self.sigmoid = SigmoidNp()
+
+    def quasiPow(self, base, exp):
+        return 1 - exp * (1 - base)
+
+    def apply_func(self, A, B):
+
+        rows = A.shape[0]
+        columns = B.shape[1]
+        result = np.ones((rows, columns))
+        for i in range(rows):
+            for j in range(columns):
+                for k in range(A.shape[1]):
+                    result[i][j] *= self.quasiPow(B[k][j], self.sigmoid.apply_func(A[i][k]))
+
+        return result
