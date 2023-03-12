@@ -7,6 +7,10 @@ class SigmoidNp:
     def __init__(self):
         pass
 
+    def __repr__(self):
+        return "Sigmoid"
+
+
     def apply_func(self, net):
         return 1.0 / (1.0 + np.exp(-net))
 
@@ -18,6 +22,9 @@ class SoftMaxNp:
     def __init__(self):
         pass
 
+    def __repr__(self):
+        return "SoftMax"
+
     def apply_func(self, net):
         e_net = np.exp(net - np.max(net))
         e_denom0 = e_net.sum(axis=0, keepdims=True)
@@ -26,6 +33,8 @@ class SoftMaxNp:
 
     def apply_derived(self, output):
         return output * (1 - output)
+
+
 
 
 class SigmoidList:
@@ -42,6 +51,8 @@ class SigmoidList:
 class SoftMaxList:
     def __init__(self):
         pass
+
+
 
     def apply_func(self, net_list):
         e_max = max(net_list)
@@ -100,6 +111,9 @@ class Tahn:
     def __init__(self):
         pass
 
+    def __repr__(self):
+        return "Tahn"
+
     def apply_func(self, x):
         flag = False
         for i in range(len(x)):
@@ -121,9 +135,11 @@ class Tahn:
 
 
 class Quasi:
-
     def __init__(self):
         self.sigmoid = SigmoidNp()
+
+    def __repr__(self):
+        return "Quasi"
 
     def quasiPow(self, base, exp):
         return 1 - exp * (1 - base)

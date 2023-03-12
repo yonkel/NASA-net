@@ -15,8 +15,8 @@ tahn = Tahn()
 sigmoid = SigmoidNp()
 
 
-def save( exp_name, net_name,  value, what, epochs, _mean, _stdev):
-    lines =  [ f"{epochs[i]} {_mean[i]} {_stdev[i]}\n" for i in range(len(epochs))  ]
+def save(exp_name, net_name, value, what, epochs, _mean, _stdev):
+    lines = [f"{epochs[i]} {_mean[i]} {_stdev[i]}\n" for i in range(len(epochs))]
 
     check_dir("results")
 
@@ -24,7 +24,9 @@ def save( exp_name, net_name,  value, what, epochs, _mean, _stdev):
         file.write("x y err\n")
         file.writelines(lines)
 
-def convergence_general( architecture, net_type, act_func, learning_rate, max_epoch, repetitions, wanted_MSE , data, show, save_params ):
+
+def convergence_general(architecture, net_type, act_func, learning_rate, max_epoch, repetitions, wanted_MSE, data, show,
+                        save_params):
     # data_train, data_test, labels_train, labels_test
     inputs, test_inputs, labels, test_labels = data
 
@@ -44,7 +46,6 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         indexer = list(range(len(inputs)))
         epoch = 0
 
-
         MSE_repetition = []
         ACC_train_repetition = []
         ACC_test_repetition = []
@@ -52,27 +53,25 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         epochs = []
         epoch_flag = True
 
-        while epoch < max_epoch :
+        while epoch < max_epoch:
             random.shuffle(indexer)
             SSE = 0
             properly_determined_train = 0
 
             for i in indexer:
-                intput = np.reshape(inputs[i], (2,1))
+                intput = np.reshape(inputs[i], (2, 1))
                 act_hidden, act_output = network.activation(intput)
                 network.learning(intput, act_hidden, act_output, labels[i])
                 SSE += (labels[i][0] - act_output[0]) ** 2
-
 
             MSE = SSE / len(labels)
             epoch += 1
             properly_determined_train = network.properly_determined(inputs, labels)
             properly_determined_test = network.properly_determined(test_inputs, test_labels)
 
-
             if epoch % 10 == 0:
-                print(f" Network {n}, epoch {epoch}, MSE {MSE}, ACC_train {properly_determined_train} = {round((properly_determined_train / len(inputs) * 100), 2 ), }%, ACC_test {properly_determined_test} = {round((properly_determined_test / len(test_labels) * 100), 2 ), }%")
-
+                print(
+                    f" Network {n}, epoch {epoch}, MSE {MSE}, ACC_train {properly_determined_train} = {round((properly_determined_train / len(inputs) * 100), 2),}%, ACC_test {properly_determined_test} = {round((properly_determined_test / len(test_labels) * 100), 2),}%")
 
             MSE_repetition.append(MSE[0])
             ACC_test_repetition.append(properly_determined_test / len(test_labels))
@@ -97,8 +96,8 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
         epoch_flag = False
 
     if show:
-        print("\n{} networks out of {} converged to a solution".format(nets_successful,repetitions))
-        plt.plot(list(range(repetitions)),epochs_to_success)
+        print("\n{} networks out of {} converged to a solution".format(nets_successful, repetitions))
+        plt.plot(list(range(repetitions)), epochs_to_success)
         # plt.show()
         plt.savefig("spirals_exp_{}.pdf".format(time.time()), format="pdf")
 
@@ -127,11 +126,14 @@ def convergence_general( architecture, net_type, act_func, learning_rate, max_ep
 
     # all_epochs = range(0, max_epoch, max_epoch // len(ACC_all[0]))
 
-    save(save_params["exp_name"], save_params["net_name"], save_params["value"], "ACC_test", epochs, ACC_test_mean, ACC_test_stdev)
-    save(save_params["exp_name"], save_params["net_name"], save_params["value"], "ACC_train", epochs, ACC_train_mean, ACC_train_stdev)
-    save(save_params["exp_name"], save_params["net_name"], save_params["value"], "MSE", epochs, MSE_mean, MSE_stdev )
+    save(save_params["exp_name"], save_params["net_name"], save_params["value"], "ACC_test", epochs, ACC_test_mean,
+         ACC_test_stdev)
+    save(save_params["exp_name"], save_params["net_name"], save_params["value"], "ACC_train", epochs, ACC_train_mean,
+         ACC_train_stdev)
+    save(save_params["exp_name"], save_params["net_name"], save_params["value"], "MSE", epochs, MSE_mean, MSE_stdev)
 
-    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time-start_time) }
+    return {"nets": nets_successful, "epochs": epochs_to_success, "time": (end_time - start_time)}
+
 
 if __name__ == '__main__':
     architecture = [2, 80, 1]
@@ -143,5 +145,6 @@ if __name__ == '__main__':
     wanted_MSE = 0.1
     data = spiralsMinusTransformed(500)
 
-    x = convergence_general( architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, wanted_MSE , data , True )
+    x = convergence_general(architecture, net_type, act_fun, learning_rate, max_epoch, repetitions, wanted_MSE, data,
+                            True)
     print(x)

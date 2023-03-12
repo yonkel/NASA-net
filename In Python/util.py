@@ -97,6 +97,19 @@ def load_json_parameters():
 
 #TODO co keby sa parametre pre experimenty posuvali v slovniku
 
+def get_threshold(labels):
+    threshold = 0.5
+    label = 0
+
+    for item in labels:
+        if item[0] == -1:
+            threshold = 0
+            label = -1
+            break
+        if item[0] == 0:
+            break
+
+    return threshold, label
 
 
 if __name__ == '__main__':
