@@ -6,16 +6,15 @@ from Convergence_new import convergence
 from statistics import mean, stdev
 from util import save_results
 
-p = 7
-inputs, labels = paritaMinus(p)
+inputs, labels, z, zz = spiralsMinusTransformed(200)
 
 # set network PARAMS
-sigm = SigmoidNp()
 tahn = Tahn()
 quasi = Quasi()
+
 hyper_params = {
     "activation_functions": [quasi, quasi, tahn],
-    "learning_rate": 0.5,
+    "learning_rate": 0.005,
     "weight_mean": 0.0,
     "weight_variance": 1
 }
@@ -23,12 +22,12 @@ hyper_params = {
 max_epoch = 400
 repetitions = 20
 success_window = 5
-expname = 'arch4 parity7'
+expname = 'spirals'
 
-inputs, labels = paritaMinus(p)
+x_dim = 2
 
-hidden_sizes = [[p, 5, 3, 1], [p, 5, 10, 1], [p, 5, 15, 1], [p, 10, 15, 1], [p, 15, 10, 1], [p, 15, 15, 1],
-                [p, 15, 10, 1], [p, 15, 5, 1], [p, 10, 5, 1]]
+hidden_sizes = [[x_dim, 5, 3, 1], [x_dim, 5, 10, 1], [x_dim, 5, 15, 1], [x_dim, 10, 15, 1], [x_dim, 15, 10, 1], [x_dim, 15, 15, 1],
+                [x_dim, 15, 10, 1], [x_dim, 15, 5, 1], [x_dim, 10, 5, 1]]
 
 plot_nets = []
 plot_epcs = []
@@ -49,6 +48,4 @@ for h in hidden_sizes:
     plot_nets.append("{} {}\n".format(h, results["nets"]))
     plot_epcs.append(("{} {} {}\n".format(h, mean(results["epochs"]), stdev(results["epochs"]))))
 
-save_results("Arch3", expname, plot_nets, plot_epcs)
-
-# [ 13, 10, 34, 15, 14, 7, 11, 17, 18, 14, 7, 8, 13, 16, 20, 7, 10, 30, 7]
+save_results("Arch4", expname, plot_nets, plot_epcs)
