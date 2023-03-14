@@ -23,18 +23,15 @@ def check_dir(name):
     if not os.path.exists(name):
         os.makedirs(name)
 
-def save_MSE_ACC( net_name, exp_name, value,  MSE_mean, MSE_stdev, ACC_mean, ACC_stdev, epochs):
+def save_MSE( net_name, exp_name, good_outputs, MSE ):
     check_dir("results")
 
-    with open(f'results/{net_name}_{exp_name}_{value}_MSE.txt', 'a') as f:
-        f.write('x y err\n')
-        for i in range(len(epochs)):
-            f.write(f"{epochs[i]} {MSE_mean[i]} {MSE_stdev[i]}")
+    with open(f'results/{net_name}_{exp_name}_MSE.txt', 'a') as f:
+        f.write(f"MSE {MSE}\n")
 
-    with open(f'results/{net_name}_{exp_name}_{value}_ACC.txt', 'a') as f:
-        f.write('x y err\n')
-        for i in range(len(epochs)):
-            f.write(f"{epochs[i]} {ACC_mean[i]} {ACC_stdev[i]}")
+    with open(f'results/{net_name}_{exp_name}_good_outputs.txt', 'a') as f:
+        f.write(f"good outputs {good_outputs}\n")
+
 
 
 

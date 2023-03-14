@@ -38,7 +38,7 @@ def paritaMinus(n):
     return inputs, labels
 
 
-def twospirals_raw(n_points, noise=.5):
+def twospirals_raw(n_points, noise=0.5):
     """
      Returns the two spirals dataset.
     """
@@ -113,8 +113,8 @@ if __name__ == "__main__":
     pass
     x, y = spiralsMinusTransformed(200)
 
-    # print("?")
-    #
+    # # print("?")
+    # #
     # for i in range(len(x)):
     #     if y[i] == 1:
     #         plt.scatter(x[i][0], x[i][1], color="red")
@@ -125,4 +125,4 @@ if __name__ == "__main__":
 
     kf3 = KFold(3, shuffle=True)
     for train_index, test_index in kf3.split(x, y):
-        print(train_index, test_index)
+        print("nieco")

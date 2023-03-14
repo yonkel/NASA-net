@@ -5,6 +5,7 @@ from generator import parita
 from Convergence_new import convergence
 from statistics import mean, stdev
 from util import save_results
+from sklearn.model_selection import KFold
 
 
 

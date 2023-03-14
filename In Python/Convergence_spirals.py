@@ -6,11 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from NASA import NASA
 from util import get_threshold
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import KFold
 
 
-def convergence_mse(net_type, net_hyperparams, repetitions, max_epoch, success_window, number_of_points, show=False,
-                    plt_name=""):
+def convergence_spirals(net_type, net_hyperparams, repetitions, max_epoch, success_window, number_of_points, show=False,
+                        plt_name=""):
     inputs, labels = spiralsMinusTransformed(number_of_points)
     threshold, label = get_threshold(labels)
 
@@ -25,6 +25,7 @@ def convergence_mse(net_type, net_hyperparams, repetitions, max_epoch, success_w
     start_time = time.time()
 
     for n in range(repetitions):
+
         network = net_type(net_hyperparams)
 
         epoch = 0
@@ -38,13 +39,10 @@ def convergence_mse(net_type, net_hyperparams, repetitions, max_epoch, success_w
             MSE = 0
             good_outputs = 0
             for i in indexer:
-
                 x = np.reshape(inputs[i], (x_dim, 1))
                 h = network.activation(x)
                 y = h[-1]
                 network.learning(h, labels[i])
-
-
 
                 MSE += (y - labels[i][0]) ** 2
 
@@ -95,21 +93,99 @@ def convergence_mse(net_type, net_hyperparams, repetitions, max_epoch, success_w
             "MSE": MSE_all, "good_outputs": good_outputs_all}
 
 
-if __name__ == "__main__":
-    p = 2
-    inputs, labels = paritaMinus(p)
+def k_fold_spirals(net_type, net_hyperparams, repetitions, max_epoch, number_of_points, show=False,
+                   plt_name=""):
+    inputs, labels = spiralsMinusTransformed(number_of_points)
+    threshold, label = get_threshold(labels)
 
-    # set network PARAMS
-    sigm = SigmoidNp()
+    MSE_all = []
+    good_outputs_all = []
+
+    x_dim = len(inputs[0])
+
+    start_time = time.time()
+
+    kf = KFold(5, shuffle=True)
+    for train_index, test_index in kf.split(inputs, labels):
+
+        for n in range(repetitions):
+            network = net_type(net_hyperparams)
+
+            epoch = 0
+
+
+            while epoch < max_epoch:
+                good_outputs_train = 0
+                MSE_train = 0
+                for i in train_index:
+                    x = np.reshape(inputs[i], (x_dim, 1))
+                    h = network.activation(x)
+                    y = h[-1]
+                    network.learning(h, labels[i])
+
+                    if y[0][0] >= threshold and labels[i][0] == 1 or y[0][0] < threshold and labels[i][0] == label:
+                        good_outputs_train += 1
+
+                    MSE_train += (labels[i][0] - y) ** 2
+
+                MSE_train /= len(train_index)
+
+                print(f"repetition {n}, epoch {epoch}, good outputs {good_outputs_train} / {len(train_index)}, MSE {MSE_train}")
+
+                epoch += 1
+
+            good_outputs_test = 0
+            MSE_test = 0
+            for i in test_index:
+                x = np.reshape(inputs[i], (x_dim, 1))
+                h = network.activation(x)
+                y = h[-1]
+
+                if y[0][0] >= threshold and labels[i][0] == 1 or y[0][0] < threshold and labels[i][0] == label:
+                    good_outputs_test += 1
+
+                MSE_test += (labels[i][0] - y) ** 2
+
+            MSE_test = np.squeeze(MSE_test / len(inputs))
+
+            good_outputs_all.append(good_outputs_test)
+            MSE_all.append(MSE_test)
+
+            if show:
+                print(
+                    f"Repetition {n}, {epoch}\n"
+                    f"test good_outputs : {good_outputs_test} / {len(test_index)}, {MSE_test}\n"
+                    f"train good_outputs : {good_outputs_train} / {len(train_index)}, {MSE_train}\n ")
+
+    end_time = time.time()
+
+    if show:
+        print(f"\ngood_outputs_all:{good_outputs_all} \n  {end_time - start_time}")
+
+        plt.scatter(MSE_all, list(range(len(MSE_all))), color ="blue")
+        plt.xlabel("repetition")
+        plt.ylabel("MSE")
+        plt.show()
+
+        plt.scatter(good_outputs_all, list(range(len(good_outputs_all))), color ="red")
+        plt.xlabel("repetition")
+        plt.ylabel("good outputs")
+        plt.show()
+
+    return {"MSE": MSE_all, "good_outputs": good_outputs_all, "max_good_test": len(test_index) }
+
+
+if __name__ == "__main__":
+
     tahn = Tahn()
     quasi = Quasi()
     hyper_params = {
-        "layers": [2, 15, 15, 1],
+        "layers": [2, 10, 10, 1],
         "activation_functions": [quasi, quasi, tahn],
         "learning_rate": 0.005,
         "weight_mean": 0.0,
         "weight_variance": 1
     }
 
-    # print(convergence(NASA, hyper_params, 5, 1000, 10, inputs, labels, True))
-    print(convergence_mse(NASA, hyper_params, 2, 50, 10, 200, True))
+    # net_type, net_hyperparams, repetitions, max_epoch,number_of_points, show=False,
+    print(k_fold_spirals(NASA, hyper_params, 2, 500, 200, True))
