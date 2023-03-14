@@ -2,7 +2,8 @@ from decimal import Decimal
 
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+
 
 
 def parita(n):
@@ -50,43 +51,30 @@ def twospirals_raw(n_points, noise=.5):
 
 def spirals(points, test_batch_size=0.2):
     x, y = twospirals_raw(points)
-    data_train, data_test, labels_train, labels_test = train_test_split(x, y, test_size=test_batch_size)
+    y = np.reshape(y, (len(y), 1))
 
-    labels_train = np.reshape(labels_train, (len(labels_train), 1))
-    labels_test = np.reshape(labels_test, (len(labels_test), 1))
-
-    return data_train, data_test, labels_train, labels_test
+    return x, y
 
 
 def spiralsMinus(points, test_batch_size=0.2):
     x, y = twospirals_raw(points)
 
-    data_train, data_test, labels_train, labels_test = train_test_split(x, y, test_size=test_batch_size)
+    y = np.where(y == 0, -1, y)
+    y = np.reshape(y, (len(y), 1))
 
-    labels_train = np.where(labels_train == 0, -1, labels_train)
-    labels_train = np.reshape(labels_train, (len(labels_train), 1))
-
-    labels_test = np.where(labels_test == 0, -1, labels_test)
-    labels_test = np.reshape(labels_test, (len(labels_test), 1))
-
-    return data_train, data_test, labels_train, labels_test
+    return x, y
 
 
-def spiralsMinusTransformed(points, test_batch_size=0.2):
+def spiralsMinusTransformed(points):
     x, y = twospirals_raw(points)
 
     m = np.max(x)
-    X = x / m
+    x = x / m
 
-    data_train, data_test, labels_train, labels_test = train_test_split(X, y, test_size=test_batch_size)
+    y = np.where(y == 0, -1, y)
+    y = np.reshape(y, (len(y), 1))
 
-    labels_train = np.where(labels_train == 0, -1, labels_train)
-    labels_train = np.reshape(labels_train, (len(labels_train), 1))
-
-    labels_test = np.where(labels_test == 0, -1, labels_test)
-    labels_test = np.reshape(labels_test, (len(labels_test), 1))
-
-    return data_train, data_test, labels_train, labels_test
+    return x, y
 
 
 def banana():
@@ -100,9 +88,8 @@ def banana():
             else:
                 labels.append([1])
 
-    return train_test_split(inputs, labels, test_size=0.2)
-    # data_train, data_test, labels_train, labels_test =
-    # return data_train + data_test , data_test, labels_train + labels_test , labels_test
+    return inputs, labels
+
 
 
 def banana_Transformed():
@@ -117,40 +104,25 @@ def banana_Transformed():
                 labels.append([1])
 
     m = np.max(inputs)
-    inputs_rescalled = inputs / m
+    inputs = inputs / m
 
-    # print(m)
-    # print(inputs[:20])
-    # print(inputs_rescalled[:20])
-
-    return train_test_split(inputs_rescalled, labels, test_size=0.2)
+    return inputs, labels
 
 
 if __name__ == "__main__":
     pass
-    x, z, y, c = banana()
+    x, y = spiralsMinusTransformed(200)
 
-    print("?")
-
-    for i in range(len(x)):
-        if y[i] == 1:
-            plt.scatter(x[i][0], x[i][1], color="red")
-        else:
-            plt.scatter(x[i][0], x[i][1], color="blue")
-
-
-    plt.show()
-
-    # # print("done")
-    # print(x)
-    # print(x[y == 0])
-
-    # x, x_t, y, y_t = banana()
+    # print("?")
+    #
     # for i in range(len(x)):
-    #     print(x[i], y[i])
-    # print(len(x))
-    # print(len(x_t))
-    # print(len(x_t)/len(x))
-    # 5300
-    # print(inp)
-    # print(lab)
+    #     if y[i] == 1:
+    #         plt.scatter(x[i][0], x[i][1], color="red")
+    #     else:
+    #         plt.scatter(x[i][0], x[i][1], color="blue")
+    #
+    # plt.show()
+
+    kf3 = KFold(3, shuffle=True)
+    for train_index, test_index in kf3.split(x, y):
+        print(train_index, test_index)

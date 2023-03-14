@@ -36,7 +36,7 @@ plot_epcs = []
 for h in hidden_sizes:
     print("Testing hidden size: {}".format(h))
     hyper_params["layers"] = h
-    results = convergence(NASA, hyper_params, repetitions, max_epoch, success_window, inputs, labels, True)
+    results = convergence_parity(NASA, hyper_params, repetitions, max_epoch, success_window, inputs, labels, True)
     print(results["epochs"])
     print("Arch1 nets: {}/{} in {} +- {} epochs. Runtime: {:.1f}s \n".format(
         results["nets"],
