@@ -107,7 +107,6 @@ def k_fold_spirals(net_type, net_hyperparams, repetitions, max_epoch, number_of_
 
     kf = KFold(5, shuffle=True)
     for train_index, test_index in kf.split(inputs, labels):
-
         for n in range(repetitions):
             network = net_type(net_hyperparams)
 
@@ -115,6 +114,9 @@ def k_fold_spirals(net_type, net_hyperparams, repetitions, max_epoch, number_of_
 
 
             while epoch < max_epoch:
+
+                np.random.shuffle(train_index)
+
                 good_outputs_train = 0
                 MSE_train = 0
                 for i in train_index:
