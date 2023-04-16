@@ -104,5 +104,5 @@ if __name__ == "__main__":
     data = spiralsMinusTransformed(200)
 
     # print(convergence(NASA, hyper_params, 5, 1000, 10, inputs, labels, True))
-    print(convergence_mse(NASA, hyper_params, 2, 50, 10, data[0].tolist(), data[2].tolist(), True))
+    print(convergence_parity(NASA, hyper_params, 2, 50, 10, data[0].tolist(), data[2].tolist(), True))
 

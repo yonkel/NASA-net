@@ -112,7 +112,6 @@ def k_fold_spirals(net_type, net_hyperparams, repetitions, max_epoch, number_of_
 
             epoch = 0
 
-
             while epoch < max_epoch:
 
                 np.random.shuffle(train_index)
@@ -132,7 +131,8 @@ def k_fold_spirals(net_type, net_hyperparams, repetitions, max_epoch, number_of_
 
                 MSE_train /= len(train_index)
 
-                print(f"repetition {n}, epoch {epoch}, good outputs {good_outputs_train} / {len(train_index)}, MSE {MSE_train}")
+                print(
+                    f"repetition {n}, epoch {epoch}, good outputs {good_outputs_train} / {len(train_index)}, MSE {MSE_train}")
 
                 epoch += 1
 
@@ -164,21 +164,20 @@ def k_fold_spirals(net_type, net_hyperparams, repetitions, max_epoch, number_of_
     if show:
         print(f"\ngood_outputs_all:{good_outputs_all} \n  {end_time - start_time}")
 
-        plt.scatter(MSE_all, list(range(len(MSE_all))), color ="blue")
+        plt.scatter(MSE_all, list(range(len(MSE_all))), color="blue")
         plt.xlabel("repetition")
         plt.ylabel("MSE")
         plt.show()
 
-        plt.scatter(good_outputs_all, list(range(len(good_outputs_all))), color ="red")
+        plt.scatter(good_outputs_all, list(range(len(good_outputs_all))), color="red")
         plt.xlabel("repetition")
         plt.ylabel("good outputs")
         plt.show()
 
-    return {"MSE": MSE_all, "good_outputs": good_outputs_all, "max_good_test": len(test_index) }
+    return {"MSE": MSE_all, "good_outputs": good_outputs_all, "max_good_test": len(test_index)}
 
 
 if __name__ == "__main__":
-
     tahn = Tahn()
     quasi = Quasi()
     hyper_params = {

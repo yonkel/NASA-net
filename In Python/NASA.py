@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from net_util import SigmoidNp, Tahn, Quasi
-
+from generator import paritaMinus
 
 class NASA:
     def __init__(self, params):
@@ -40,6 +40,7 @@ class NASA:
             h.append(h_i)
 
         # h = [x, h1, ..., hn, y]
+        # print(h[-2], h[-2].shape)
         return h
 
     def quasi_learn(self, error, W):

@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 
 
-
 def parita(n):
     inputs, labels = [], []
 
@@ -38,16 +37,62 @@ def paritaMinus(n):
     return inputs, labels
 
 
-def twospirals_raw(n_points, noise=0.5):
+def twospirals_raw(n_points, noise=0.5, step_test=5):
     """
      Returns the two spirals dataset.
     """
-    n = np.sqrt(np.random.rand(n_points, 1)) * 780 * (2 * np.pi) / 360
-    d1x = -np.cos(n) * n + np.random.rand(n_points, 1) * noise
-    d1y = np.sin(n) * n + np.random.rand(n_points, 1) * noise
-    return (np.vstack((np.hstack((d1x, d1y)), np.hstack((-d1x, -d1y)))),
-            np.hstack((np.zeros(n_points), np.ones(n_points))))
+    n_train = np.sqrt(np.random.rand(n_points, 1)) * 780 * (2 * np.pi) / 360
+    n_test = n_train[::step_test]
 
+    n_train = np.delete(n_train, np.arange(0, n_train.size, step_test))
+    n_train = n_train.reshape((len(n_train), 1))
+
+    x_train = -np.cos(n_train) * n_train + np.random.rand(n_train.size, 1) * noise
+    y_train = np.sin(n_train) * n_train + np.random.rand(n_train.size, 1) * noise
+
+    x_test = -np.cos(n_test) * n_test + np.random.rand(n_test.size, 1) * noise
+    y_test = np.sin(n_test) * n_test + np.random.rand(n_test.size, 1) * noise
+
+    train_data = (np.vstack((np.hstack((x_train, y_train)), np.hstack((-x_train, -y_train)))),
+                  np.hstack((np.zeros(n_train.size), np.ones(n_train.size))))
+
+    test_data = (np.vstack((np.hstack((x_test, y_test)), np.hstack((-x_test, -y_test)))),
+                 np.hstack((np.zeros(n_test.size), np.ones(n_test.size))))
+
+    return train_data, test_data
+
+
+def twospirals(n_points, step_test = 5):
+    n_train = list(range(n_points))
+    n_test = n_train[::step_test]
+    del n_train[::step_test]
+
+    x_train = []
+    for n in n_train:
+        r =  0.4 * (105-n) / 104
+        a = np.pi * (n-1) / 16
+        x1 = r * np.sin(a) + 0.5
+        x2 = r * np.cos(a) + 0.5
+
+        x_train.append(np.array([x1, x2]))
+        x_train.append(np.array([1-x1, 1-x2]))
+    y_train = [i % 2 for i in range(len(x_train))]
+
+    x_test = []
+    for n in n_test:
+        r = 0.4 * (105 - n) / 104
+        a = np.pi * (n - 1) / 16
+        x1 = r * np.sin(a) + 0.5
+        x2 = r * np.cos(a) + 0.5
+
+        x_test.append(np.array([x1, x2]))
+        x_test.append(np.array([1-x1, 1-x2]))
+    y_test = [i % 2 for i in range(len(x_test))]
+
+    train = [x_train, y_train]
+    test = [x_test, y_test]
+
+    return train, test
 
 def spirals(points, test_batch_size=0.2):
     x, y = twospirals_raw(points)
@@ -91,7 +136,6 @@ def banana():
     return inputs, labels
 
 
-
 def banana_Transformed():
     inputs, labels = [], []
     with open("banana_dataset.arff") as file:
@@ -111,18 +155,18 @@ def banana_Transformed():
 
 if __name__ == "__main__":
     pass
-    x, y = spiralsMinusTransformed(200)
+    train, test = twospirals(100)
 
-    # # print("?")
-    # #
-    # for i in range(len(x)):
-    #     if y[i] == 1:
-    #         plt.scatter(x[i][0], x[i][1], color="red")
-    #     else:
-    #         plt.scatter(x[i][0], x[i][1], color="blue")
+    # print("?")
     #
-    # plt.show()
 
-    kf3 = KFold(3, shuffle=True)
-    for train_index, test_index in kf3.split(x, y):
-        print("nieco")
+    for data in train, test:
+        x, y = data
+
+        for i in range(len(x)):
+            if y[i] == 1:
+                plt.scatter(x[i][0], x[i][1], color="red")
+            else:
+                plt.scatter(x[i][0], x[i][1], color="blue")
+
+        plt.show()
